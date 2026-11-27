@@ -1,5 +1,5 @@
 // Service worker: rede primeiro, cache como reserva (jogo funciona offline após a 1ª visita).
-var CACHE = 'voidbreach-v3';
+var CACHE = 'voidbreach-v4';
 var CORE = ['./', './index.html', './icon.svg', './fases.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', function (e) {
