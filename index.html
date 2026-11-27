@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#04080d" />
+  <meta name="description" content="VOIDBREACH // PROTOCOLO ZERO — 120 desafios de infiltração web e criptografia em 4 perfis (Fácil, Médio, Difícil e Mago) com validação SHA-256 e PWA offline." />
+  <title>VOIDBREACH // PROTOCOLO ZERO</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="VoidBreach" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #04080d;
+      --bg-surface: rgba(10, 18, 28, 0.92);
+      --border-subtle: rgba(16, 185, 129, 0.32);
+      --accent-1: #10b981;
+      --accent-2: #38bdf8;
+      --text-main: #ecfdf5;
+      --grid-color: rgba(16, 185, 129, 0.06);
+    }
+
+    [data-theme="crimson"] {
+      --bg-base: #120609;
+      --bg-surface: rgba(28, 10, 16, 0.92);
+      --border-subtle: rgba(244, 63, 94, 0.38);
+      --accent-1: #f43f5e;
+      --accent-2: #fbbf24;
+      --text-main: #fff1f2;
+      --grid-color: rgba(244, 63, 94, 0.06);
+    }
+
+    [data-theme="arctic"] {
+      --bg-base: #07111e;
+      --bg-surface: rgba(13, 28, 48, 0.92);
+      --border-subtle: rgba(56, 189, 248, 0.38);
+      --accent-1: #38bdf8;
+      --accent-2: #a5f3fc;
+      --text-main: #f0f9ff;
+      --grid-color: rgba(56, 189, 248, 0.07);
+    }
+
+    [data-theme="arcane"] {
+      --bg-base: #0f071a;
+      --bg-surface: rgba(24, 12, 42, 0.92);
+      --border-subtle: rgba(192, 132, 252, 0.4);
+      --accent-1: #c084fc;
+      --accent-2: #fbbf24;
+      --text-main: #faf5ff;
+      --grid-color: rgba(192, 132, 252, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-base);
+      background-image:
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+      background-size: 26px 26px;
+      color: var(--text-main);
+      overflow-x: hidden;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .font-code { font-family: 'JetBrains Mono', monospace; }
+
+    .cyber-panel {
+      background: var(--bg-surface);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 14px 36px -12px rgba(0, 0, 0, 0.72);
+    }
+
+    .btn-tactile {
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.15s ease;
+    }
+    .btn-tactile:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+    .btn-tactile:active:not(:disabled) {
+      transform: translateY(1px) scale(0.97);
+    }
+    .btn-tactile:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .stealth-text { color: #020617; background: #020617; border-radius: 6px; padding: 6px 8px; }
+    .stealth-text::selection { color: #ecfdf5; background: #10b981; }
+
+    .node-locked { opacity: 0.38; cursor: not-allowed; filter: grayscale(0.6); }
+
+    @keyframes stickerFloat {
+      0% { transform: translate(-50%, 16px) scale(0.4) rotate(-8deg); opacity: 0; }
+      20% { transform: translate(-50%, -14px) scale(1.12) rotate(4deg); opacity: 1; }
+      80% { transform: translate(-50%, -54px) scale(1) rotate(-3deg); opacity: 1; }
+      100% { transform: translate(-50%, -95px) scale(0.88) rotate(3deg); opacity: 0; }
+    }
+    .floating-sticker {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      animation: stickerFloat 1.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.65));
+    }
+
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-7px); }
+      40%, 80% { transform: translateX(7px); }
+    }
+    .shake-box { animation: shakeError 0.38s ease-in-out; }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.0); }
+      50% { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.45); }
+    }
+    .pulse-glow { animation: pulseGlow 1.1s ease-in-out 3; }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, label:focus-within {
+      outline: 2px solid var(--accent-2);
+      outline-offset: 2px;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.25); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 999px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP CYBER TERMINAL HEADER -->
+  <header class="sticky top-0 z-30 cyber-panel border-x-0 border-t-0 px-3 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-2.5">
+      <button id="btnOpenProfile" type="button" class="group flex items-center gap-2 p-1 pr-3 rounded-full bg-black/45 hover:bg-black/65 border border-white/10 transition" title="Editar Credencial do Operador">
+        <div id="headerAvatarWrapper" class="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center bg-slate-900 text-lg ring-2 ring-emerald-400/50 transition">
+          👾
+        </div>
+        <div class="text-left leading-tight">
+          <div id="headerOperatorName" class="text-xs sm:text-sm font-bold truncate max-w-[95px] sm:max-w-[140px]">Ghost_01</div>
+          <div class="text-[10px] opacity-75 font-code flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="headerSolvedCount">0/120 Nós</span>
+          </div>
+        </div>
+      </button>
+
+      <div class="flex flex-col pl-2 border-l border-white/10 select-none">
+        <div class="flex items-center gap-1.5">
+          <img src="icon.svg" alt="" class="w-5 h-5 rounded-md" />
+          <span class="font-code font-extrabold text-sm sm:text-base tracking-wider bg-gradient-to-r from-emerald-300 via-teal-200 to-sky-300 bg-clip-text text-transparent">
+            VOIDBREACH
+          </span>
+        </div>
+        <span class="text-[9px] uppercase tracking-widest opacity-60 hidden sm:inline">Protocolo Zero • SHA-256</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      <button id="btnOpenNodes" type="button" class="btn-tactile px-3 sm:px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 flex items-center gap-2 text-xs sm:text-sm font-bold">
+        <span id="headerProfileBadge" class="px-2 py-0.5 rounded-md text-[10px] uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">🟢 Fácil</span>
+        <span id="headerNodeTitle" class="font-code">Nó 01/30</span>
+        <span class="opacity-60 text-xs">▼</span>
+      </button>
+    </div>
+
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <button id="btnOpenShop" type="button" class="btn-tactile flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/35 text-amber-300 font-bold text-xs sm:text-sm" title="Arsenal & Loja">
+        <span>🪙</span>
+        <span id="headerCoins" class="font-code">120</span>
+        <span class="hidden md:inline text-[10px] uppercase bg-amber-400/20 px-1.5 py-0.5 rounded-full">Loja</span>
+      </button>
+
+      <div class="relative">
+        <select id="themeSelect" aria-label="Tema Visual" class="appearance-none bg-black/45 hover:bg-black/65 border border-white/15 rounded-xl pl-2.5 pr-6 py-1.5 text-xs font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-400">
+          <option value="matrix">🟢 Matrix Phosphor</option>
+          <option value="crimson">🔴 Crimson Breach</option>
+          <option value="arctic">💠 Ghost Arctic</option>
+          <option value="arcane">🔮 Arcane Mago</option>
+        </select>
+        <span class="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px] opacity-70">🎨</span>
+      </div>
+
+      <button id="btnToggleSound" type="button" class="btn-tactile w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 flex items-center justify-center text-sm" title="Ligar/desligar som" aria-label="Ligar ou desligar som">🔊</button>
+
+      <button id="btnOpenHelp" type="button" class="btn-tactile h-8 sm:h-9 px-2.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 text-sky-200 flex items-center justify-center gap-1 text-xs font-bold" title="Como Jogar" aria-label="Como Jogar">
+        <span>❓</span><span class="hidden sm:inline">Como Jogar</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-2.5 sm:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-stretch">
+
+    <!-- LEFT COLUMN: 4-TAB TARGET SANDBOX -->
+    <section class="lg:col-span-7 flex flex-col gap-3">
+      <div class="cyber-panel rounded-2xl p-3 sm:p-4 flex flex-col flex-1 justify-between gap-3">
+
+        <!-- Virtual URL Bar -->
+        <div class="flex items-center gap-1.5 bg-black/60 border border-white/15 rounded-xl px-2.5 py-1.5 focus-within:border-emerald-400 transition">
+          <span class="text-xs text-emerald-400 font-code select-none">node://</span>
+          <input id="virtualAddressInput" type="text" spellcheck="false" autocomplete="off" class="flex-1 bg-transparent font-code text-xs sm:text-sm text-emerald-300 focus:outline-none min-w-0" value="sector-01.void/gate-01" aria-label="Endereço do nó alvo" />
+          <button id="btnSendAddress" type="button" class="btn-tactile px-2.5 py-1 rounded-lg bg-emerald-500/25 hover:bg-emerald-500/40 border border-emerald-400/40 text-emerald-200 font-code text-[11px] font-bold shrink-0">
+            GET ↵
+          </button>
+        </div>
+
+        <!-- Node Header -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-code text-xs font-extrabold">
+                <span id="nodeCodeTag">NODE #01</span>
+              </span>
+              <span id="nodeVectorTag" class="text-[11px] font-code font-semibold opacity-75">Vetor: Inspeção DOM</span>
+            </div>
+            <h1 id="nodeTitle" class="text-lg sm:text-xl font-extrabold mt-1 tracking-tight">Rastro no Markup #01</h1>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <button id="btnPrevNode" type="button" class="btn-tactile w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 font-bold text-xs" title="Nó anterior" aria-label="Nó anterior">◀</button>
+            <button id="btnNextNodeNav" type="button" class="btn-tactile w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 font-bold text-xs" title="Próximo nó" aria-label="Próximo nó">▶</button>
+          </div>
+        </div>
+
+        <!-- Briefing (missão) -->
+        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-400/30">
+          <div class="text-[10px] font-code uppercase tracking-wider text-emerald-400 font-bold mb-0.5">🎯 Sua Missão:</div>
+          <p id="nodeBriefing" class="text-xs sm:text-sm leading-relaxed opacity-95"></p>
+          <p id="nodeTabTip" class="mt-1.5 text-[11px] text-sky-300"></p>
+        </div>
+
+        <!-- 4 Synchronized Sandbox Tabs -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+          <button type="button" data-sandbox-tab="web" class="sandbox-tab-btn btn-tactile py-2 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 border">
+            <span>🌐</span> <span>Interface do Nó</span>
+          </button>
+          <button type="button" data-sandbox-tab="source" class="sandbox-tab-btn btn-tactile py-2 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 border">
+            <span>&lt;/&gt;</span> <span>Código-Fonte</span>
+          </button>
+          <button type="button" data-sandbox-tab="headers" class="sandbox-tab-btn btn-tactile py-2 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 border">
+            <span>📡</span> <span>Cookies & Headers</span>
+          </button>
+          <button type="button" data-sandbox-tab="console" class="sandbox-tab-btn btn-tactile py-2 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 border">
+            <span>💻</span> <span>Console / Decoder</span>
+          </button>
+        </div>
+
+        <!-- SANDBOX VIEWPORT -->
+        <div class="rounded-2xl bg-slate-950/90 border border-white/15 p-3.5 sm:p-4 min-h-[250px] sm:min-h-[285px] flex flex-col justify-between overflow-x-auto">
+
+          <!-- TAB 1: INTERFACE DO NÓ -->
+          <div id="tabViewWeb" class="space-y-3">
+            <div class="flex items-center justify-between border-b border-white/10 pb-2 text-[11px] font-code opacity-75">
+              <span>HTTP/1.1 200 OK • Content-Type: text/html</span>
+              <span id="simSessionPill" class="px-2 py-0.5 rounded bg-white/10 text-amber-300">session_role=guest</span>
+            </div>
+
+            <div id="simWebBody" class="space-y-3 text-xs sm:text-sm"></div>
+
+            <div id="simServerOutput" class="hidden p-3 rounded-xl bg-black/75 border border-emerald-400/40 font-code text-xs text-emerald-300 whitespace-pre-wrap break-all"></div>
+            <button id="btnUseServerKey" type="button" class="hidden btn-tactile w-full py-2 rounded-xl bg-emerald-400 text-slate-950 font-extrabold text-xs">✅ Usar esta chave para autenticar</button>
+          </div>
+
+          <!-- TAB 2: CÓDIGO-FONTE -->
+          <div id="tabViewSource" class="hidden space-y-2">
+            <div class="flex items-center justify-between text-[11px] font-code opacity-70">
+              <span>view-source:node://<span id="sourceUrlLabel">sector-01.void/gate-01</span></span>
+              <div class="flex items-center gap-1.5">
+                <button id="btnSourceToDecoder" type="button" class="btn-tactile px-2 py-1 rounded-md bg-emerald-500/20 border border-emerald-400/35 text-emerald-200 text-[10px] font-bold">💻 Enviar ao Decoder</button>
+                <button id="btnCopySource" type="button" class="btn-tactile px-2 py-1 rounded-md bg-white/10 border border-white/15 text-[10px] font-bold">📋 Copiar</button>
+              </div>
+            </div>
+            <p class="text-[11px] opacity-60">Dica: selecione um trecho do código e clique em "Enviar ao Decoder" para mandar só a parte selecionada.</p>
+            <pre id="simSourceCode" class="p-3 rounded-xl bg-black/85 border border-white/10 font-code text-xs leading-relaxed text-sky-300 whitespace-pre-wrap overflow-x-auto max-h-[240px] overflow-y-auto"></pre>
+          </div>
+
+          <!-- TAB 3: COOKIES & HEADERS -->
+          <div id="tabViewHeaders" class="hidden space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-code text-xs font-bold text-amber-300">Interceptador de Requisição HTTP</span>
+              <button id="btnResendHeaders" type="button" class="btn-tactile px-3 py-1.5 rounded-lg bg-amber-500/25 hover:bg-amber-500/40 border border-amber-400/45 text-amber-200 font-code text-xs font-bold">
+                🚀 Reenviar Request
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-code text-xs">
+              <div>
+                <label for="hdrCookieLoggedIn" class="block text-[10px] opacity-70 mb-1">Cookie: loggedin</label>
+                <input id="hdrCookieLoggedIn" type="text" value="0" class="w-full px-2.5 py-1.5 rounded-lg bg-black/75 border border-white/15 focus:border-emerald-400 focus:outline-none text-emerald-300" />
+              </div>
+              <div>
+                <label for="hdrCookieRole" class="block text-[10px] opacity-70 mb-1">Cookie: session_role</label>
+                <input id="hdrCookieRole" type="text" value="guest" class="w-full px-2.5 py-1.5 rounded-lg bg-black/75 border border-white/15 focus:border-emerald-400 focus:outline-none text-emerald-300" />
+              </div>
+              <div>
+                <label for="hdrReferer" class="block text-[10px] opacity-70 mb-1">Header: Referer</label>
+                <input id="hdrReferer" type="text" value="https://public.void/" class="w-full px-2.5 py-1.5 rounded-lg bg-black/75 border border-white/15 focus:border-emerald-400 focus:outline-none text-sky-300" />
+              </div>
+              <div>
+                <label for="hdrUserAgent" class="block text-[10px] opacity-70 mb-1">Header: User-Agent</label>
+                <input id="hdrUserAgent" type="text" value="VoidBrowser/4.2" class="w-full px-2.5 py-1.5 rounded-lg bg-black/75 border border-white/15 focus:border-emerald-400 focus:outline-none text-sky-300" />
+              </div>
+              <div>
+                <label for="hdrXff" class="block text-[10px] opacity-70 mb-1">Header: X-Forwarded-For</label>
+                <input id="hdrXff" type="text" value="198.51.100.42" class="w-full px-2.5 py-1.5 rounded-lg bg-black/75 border border-white/15 focus:border-emerald-400 focus:outline-none text-purple-300" />
+              </div>
+              <div>
+                <label for="hdrAuth" class="block text-[10px] opacity-70 mb-1">Header: Authorization / X-Debug</label>
+                <input id="hdrAuth" type="text" value="false" class="w-full px-2.5 py-1.5 rounded-lg bg-black/75 border border-white/15 focus:border-emerald-400 focus:outline-none text-purple-300" />
+              </div>
+            </div>
+            <p class="text-[11px] opacity-70">Edite os cookies ou cabeçalhos acima e clique em <strong>Reenviar Request</strong> para atualizar a resposta do alvo.</p>
+          </div>
+
+          <!-- TAB 4: CONSOLE / DECODER -->
+          <div id="tabViewConsole" class="hidden space-y-2.5 font-code text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-emerald-300 font-bold">void@ops-rig:~$ decoder --interactive</span>
+              <button id="btnClearDecoder" type="button" class="text-[10px] text-rose-300 hover:underline">Limpar</button>
+            </div>
+
+            <textarea id="decoderInput" rows="2" placeholder="Cole Base64, ROT13, Hex, URL, Binário, JWT ou 'xor 55 <hex>'..." class="w-full p-2.5 rounded-xl bg-black/80 border border-white/15 focus:border-emerald-400 focus:outline-none text-emerald-200 resize-none"></textarea>
+
+            <div class="flex items-center gap-2">
+              <label for="decoderParam" class="text-[10px] opacity-75 shrink-0">Parâmetro:</label>
+              <input id="decoderParam" type="text" autocomplete="off" spellcheck="false" placeholder="chave XOR (hex), deslocamento de César ou palavra do Vigenère" class="flex-1 min-w-0 px-2 py-1.5 rounded-lg bg-black/80 border border-white/15 focus:border-emerald-400 focus:outline-none text-[11px] text-emerald-200" />
+            </div>
+
+            <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
+              <button type="button" data-decode-op="b64d" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-emerald-500/20 border border-emerald-400/35 text-emerald-200 font-bold text-[10px]">B64 Dec</button>
+              <button type="button" data-decode-op="b64e" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-white/10 border border-white/15 text-[10px]">B64 Enc</button>
+              <button type="button" data-decode-op="rot13" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-sky-500/20 border border-sky-400/35 text-sky-200 font-bold text-[10px]">ROT13</button>
+              <button type="button" data-decode-op="hexd" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-amber-500/20 border border-amber-400/35 text-amber-200 font-bold text-[10px]">Hex Dec</button>
+              <button type="button" data-decode-op="urld" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-purple-500/20 border border-purple-400/35 text-purple-200 font-bold text-[10px]">URL Dec</button>
+              <button type="button" data-decode-op="rev" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-white/10 border border-white/15 text-[10px]">Reverse</button>
+              <button type="button" data-decode-op="bin" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-teal-500/20 border border-teal-400/35 text-teal-200 font-bold text-[10px]">Bin Dec</button>
+              <button type="button" data-decode-op="jwt" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-rose-500/20 border border-rose-400/35 text-rose-200 font-bold text-[10px]">JWT</button>
+              <button type="button" data-decode-op="xor" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-indigo-500/20 border border-indigo-400/35 text-indigo-200 font-bold text-[10px]">XOR</button>
+              <button type="button" data-decode-op="dec" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-white/10 border border-white/15 text-[10px]">Dec→Texto</button>
+              <button type="button" data-decode-op="caesar" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-orange-500/20 border border-orange-400/35 text-orange-200 font-bold text-[10px]">César</button>
+              <button type="button" data-decode-op="atbash" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-lime-500/20 border border-lime-400/35 text-lime-200 font-bold text-[10px]">Atbash</button>
+              <button type="button" data-decode-op="vig" class="decoder-op-btn btn-tactile py-1.5 px-1.5 rounded-lg bg-fuchsia-500/20 border border-fuchsia-400/35 text-fuchsia-200 font-bold text-[10px]">Vigenère</button>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-black/85 border border-white/10 min-h-[56px] text-amber-200 break-all whitespace-pre-wrap" id="decoderOutput">[Aguardando entrada para decodificação...]</div>
+            <div class="flex flex-wrap gap-1.5">
+              <button id="btnDecoderChain" type="button" class="btn-tactile px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/15 text-[10px] font-bold">⬆ Usar resultado como nova entrada</button>
+              <button id="btnUseDecoderKey" type="button" class="hidden btn-tactile px-2.5 py-1.5 rounded-lg bg-emerald-400 text-slate-950 text-[10px] font-extrabold">✅ Usar chave encontrada</button>
+            </div>
+            <p class="text-[10px] opacity-60 font-sans">XOR, César e Vigenère usam o campo <strong>Parâmetro</strong>. Para XOR também vale digitar <code>xor 55 &lt;hex&gt;</code> e apertar Enter.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: SHA-256 VALIDATOR, 3-TIER HINTS & STICKERS -->
+    <section class="lg:col-span-5 flex flex-col gap-3">
+      <div class="cyber-panel rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between flex-1 gap-3.5">
+
+        <!-- 1. SHA-256 Access Key Box -->
+        <div id="answerCardBox" class="p-3.5 rounded-2xl bg-black/45 border border-white/15">
+          <div class="flex items-center justify-between mb-2">
+            <label for="answerInput" class="font-code text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+              <span>🔐</span> <span>Chave de Acesso (SHA-256)</span>
+            </label>
+            <span id="solvedBadgePill" class="hidden px-2 py-0.5 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 font-code text-[10px] font-bold">
+              ✓ NÓ COMPROMETIDO
+            </span>
+          </div>
+
+          <form id="answerForm" class="flex gap-2">
+            <input id="answerInput" type="text" autocomplete="off" spellcheck="false" placeholder="VB{...}" class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-white/20 focus:border-emerald-400 focus:outline-none font-code text-sm font-bold tracking-wider" />
+            <button id="btnSubmitAnswer" type="submit" class="btn-tactile px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-300 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 shrink-0">
+              AUTENTICAR
+            </button>
+          </form>
+
+          <p class="mt-2 text-[11px] opacity-75">Cole aqui a chave que você encontrou, no formato <span class="font-code text-emerald-300">VB{...}</span>. Pode colar a linha inteira — a chave é extraída automaticamente.</p>
+          <div class="mt-1 font-code text-[10px] opacity-50 truncate">
+            HASH ALVO: <span id="targetHashPreview">carregando...</span>
+          </div>
+
+          <div id="feedbackMsg" class="hidden mt-2.5 px-3 py-2 rounded-xl text-xs font-semibold"></div>
+        </div>
+
+        <!-- 2. 3-Tier Progressive Hint System -->
+        <div class="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex-1 flex flex-col justify-between gap-2.5">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-code text-xs font-bold uppercase tracking-wider text-amber-300">💡 Inteligência & Dicas (3 Níveis)</span>
+              <span id="discountTag" class="hidden text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">-20% VIP</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 mb-2.5">
+              <button id="btnHint1" type="button" class="btn-tactile p-2 rounded-xl bg-white/10 hover:bg-amber-500/20 border border-white/15 flex flex-col items-center text-center">
+                <span class="text-xs font-bold">1. Sussurro</span>
+                <span id="costHint1" class="font-code text-[10px] text-amber-300 mt-0.5">10 🪙</span>
+              </button>
+
+              <button id="btnHint2" type="button" class="btn-tactile p-2 rounded-xl bg-white/10 hover:bg-amber-500/20 border border-white/15 flex flex-col items-center text-center">
+                <span class="text-xs font-bold">2. Técnica</span>
+                <span id="costHint2" class="font-code text-[10px] text-amber-300 mt-0.5">25 🪙</span>
+              </button>
+
+              <button id="btnHint3" type="button" class="btn-tactile p-2 rounded-xl bg-white/10 hover:bg-rose-500/20 border border-white/15 flex flex-col items-center text-center">
+                <span class="text-xs font-bold">3. Payload</span>
+                <span id="costHint3" class="font-code text-[10px] text-rose-300 mt-0.5">50 🪙</span>
+              </button>
+            </div>
+
+            <p class="text-[10px] opacity-65 mb-2">Travou? Gaste moedas 🪙 em dicas. A 1ª aponta o caminho, a 2ª ensina a técnica e a 3ª revela a chave.</p>
+
+            <div id="hintsFeed" class="space-y-1.5 max-h-48 overflow-y-auto pr-1 text-xs">
+              <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 opacity-65 italic">
+                Nenhuma inteligência solicitada para este nó ainda.
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-white/10">
+            <div class="flex items-center justify-between text-[11px]">
+              <button id="btnToggleScratchpad" type="button" class="text-emerald-300 hover:underline font-bold">📝 Bloco de Notas do Operador</button>
+              <span class="opacity-65 font-code">4 Perfis • 120 Nós</span>
+            </div>
+            <div id="scratchpadBox" class="hidden mt-2">
+              <textarea id="scratchpadInput" rows="2" placeholder="Anote tokens, cookies, queries ou payloads..." class="w-full p-2 rounded-xl bg-black/60 border border-white/15 font-code text-xs text-slate-200 focus:outline-none resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Stickers -->
+        <div class="p-2.5 rounded-2xl bg-black/40 border border-white/10">
+          <div class="text-[10px] uppercase tracking-wider opacity-65 font-bold mb-1.5">Gestos & Stickers do Operador:</div>
+          <div class="grid grid-cols-5 gap-1.5">
+            <button type="button" data-sticker="💻 Acesso Root Concedido!" class="sticker-trigger btn-tactile py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold flex flex-col items-center">
+              <span class="text-base">💻</span><span class="text-[9px]">Root!</span>
+            </button>
+            <button type="button" data-sticker="🧙‍♂️ Magia Pura no Payload!" class="sticker-trigger btn-tactile py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold flex flex-col items-center">
+              <span class="text-base">🧙‍♂️</span><span class="text-[9px]">Mago</span>
+            </button>
+            <button type="button" data-sticker="🕵️ Falha Localizada!" class="sticker-trigger btn-tactile py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold flex flex-col items-center">
+              <span class="text-base">🕵️</span><span class="text-[9px]">Brecha</span>
+            </button>
+            <button type="button" data-sticker="🤯 Firewall Insano!" class="sticker-trigger btn-tactile py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold flex flex-col items-center">
+              <span class="text-base">🤯</span><span class="text-[9px]">Tenso</span>
+            </button>
+            <button type="button" data-sticker="⚡ Bypass Limpo!" class="sticker-trigger btn-tactile py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold flex flex-col items-center">
+              <span class="text-base">⚡</span><span class="text-[9px]">Bypass</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL 1: LOCAL OPERATOR LOGIN -->
+  <div id="profileModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="cyber-panel rounded-3xl max-w-md w-full p-5 sm:p-6 border border-emerald-400/40 shadow-2xl max-h-[94vh] overflow-y-auto relative">
+      <button id="btnCloseProfile" type="button" class="hidden absolute top-3 right-3 btn-tactile w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold" aria-label="Fechar">✕</button>
+      <div class="text-center mb-4">
+        <span class="inline-block px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-code text-[11px] font-bold uppercase tracking-wider mb-1">
+          Identidade Local • GitHub Pages PWA
+        </span>
+        <h2 class="text-xl sm:text-2xl font-extrabold">VOIDBREACH // PROTOCOLO ZERO</h2>
+        <p class="text-xs opacity-75 mt-1">Crie sua credencial de operador para salvar seu progresso nos 120 nós.</p>
+      </div>
+
+      <div class="flex flex-col items-center mb-4">
+        <div class="w-24 h-24 rounded-full overflow-hidden bg-slate-900 flex items-center justify-center text-4xl shadow-xl ring-4 ring-emerald-400/50 relative">
+          <span id="profileEmojiPreview">👾</span>
+          <img id="profileImgPreview" class="hidden w-full h-full object-cover" alt="Foto do Operador" />
+          <video id="profileCameraVideo" class="hidden w-full h-full object-cover scale-x-[-1]" autoplay playsinline muted></video>
+        </div>
+
+        <div id="profileCameraControls" class="hidden mt-2.5 flex items-center gap-2">
+          <button id="btnSnapCamera" type="button" class="btn-tactile px-3.5 py-1.5 rounded-full bg-emerald-400 text-slate-950 font-extrabold text-xs">
+            📸 Capturar Foto
+          </button>
+          <button id="btnStopCamera" type="button" class="btn-tactile px-3 py-1.5 rounded-full bg-white/15 text-xs font-bold">
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 mb-3">
+        <button id="btnTabAvatars" type="button" class="btn-tactile py-2 px-2 rounded-xl bg-emerald-500/25 border border-emerald-400/50 text-xs font-bold flex items-center justify-center gap-1.5">
+          <span>🎭</span> Ícones
+        </button>
+        <button id="btnTabCamera" type="button" class="btn-tactile py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-bold flex items-center justify-center gap-1.5">
+          <span>📷</span> Câmera
+        </button>
+        <label class="btn-tactile py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>🖼️</span> Galeria
+          <input id="inputGalleryUpload" type="file" accept="image/*" class="hidden" />
+        </label>
+      </div>
+
+      <div class="grid grid-cols-6 gap-2 mb-3 p-2.5 rounded-2xl bg-black/45 border border-white/10">
+        <button type="button" data-avatar="👾" class="avatar-preset-btn p-2 rounded-xl bg-white/10 hover:bg-emerald-500/30 text-2xl transition">👾</button>
+        <button type="button" data-avatar="🧙‍♂️" class="avatar-preset-btn p-2 rounded-xl bg-white/10 hover:bg-emerald-500/30 text-2xl transition">🧙‍♂️</button>
+        <button type="button" data-avatar="🦊" class="avatar-preset-btn p-2 rounded-xl bg-white/10 hover:bg-emerald-500/30 text-2xl transition">🦊</button>
+        <button type="button" data-avatar="🥷" class="avatar-preset-btn p-2 rounded-xl bg-white/10 hover:bg-emerald-500/30 text-2xl transition">🥷</button>
+        <button type="button" data-avatar="🦉" class="avatar-preset-btn p-2 rounded-xl bg-white/10 hover:bg-emerald-500/30 text-2xl transition">🦉</button>
+        <button type="button" data-avatar="🔮" class="avatar-preset-btn p-2 rounded-xl bg-white/10 hover:bg-emerald-500/30 text-2xl transition">🔮</button>
+      </div>
+
+      <p id="cameraStatusError" class="hidden text-xs text-amber-300 bg-amber-500/15 border border-amber-400/30 rounded-xl p-2 mb-3 text-center"></p>
+
+      <div class="mb-4">
+        <label for="inputOperatorName" class="block font-code text-[11px] font-bold uppercase tracking-wider opacity-75 mb-1">Codinome do Operador:</label>
+        <input id="inputOperatorName" type="text" maxlength="20" placeholder="Ex: NullPhantom" class="w-full px-3.5 py-2.5 rounded-xl bg-black/55 border border-white/20 focus:border-emerald-400 focus:outline-none text-sm font-bold" />
+      </div>
+
+      <button id="btnConfirmProfile" type="button" class="btn-tactile w-full py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-300 text-slate-950 font-extrabold text-sm shadow-lg">
+        🔓 Conectar à Rede Void
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: 4-PROFILE & 120-NODE MATRIX -->
+  <div id="nodesModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-4">
+    <div class="cyber-panel rounded-3xl max-w-3xl w-full p-4 sm:p-6 border border-white/20 shadow-2xl max-h-[92vh] flex flex-col">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/10">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold">Topologia da Rede (120 Nós)</h2>
+          <p id="nodesProgressSummary" class="text-xs opacity-75 font-code">Comprometidos: 0/120 nós</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnJumpUnsolved" type="button" class="btn-tactile px-3 py-1.5 rounded-xl bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 text-xs font-bold">
+            ▶ Próximo Alvo
+          </button>
+          <button id="btnCloseNodes" type="button" class="btn-tactile w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold" aria-label="Fechar">✕</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 my-3">
+        <button type="button" data-profile-tab="Fácil" class="profile-tab-btn btn-tactile py-2 rounded-xl font-bold text-xs sm:text-sm border">
+          🟢 Fácil (30)
+        </button>
+        <button type="button" data-profile-tab="Médio" class="profile-tab-btn btn-tactile py-2 rounded-xl font-bold text-xs sm:text-sm border">
+          🟡 Médio (30)
+        </button>
+        <button type="button" data-profile-tab="Difícil" class="profile-tab-btn btn-tactile py-2 rounded-xl font-bold text-xs sm:text-sm border">
+          🔴 Difícil (30)
+        </button>
+        <button type="button" data-profile-tab="Mago" class="profile-tab-btn btn-tactile py-2 rounded-xl font-bold text-xs sm:text-sm border">
+          🔮 Mago (30)
+        </button>
+      </div>
+
+      <div id="nodesGridContainer" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-2 overflow-y-auto pr-1 flex-1 py-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: SHOP -->
+  <div id="shopModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="cyber-panel rounded-3xl max-w-2xl w-full p-4 sm:p-6 border border-amber-400/40 shadow-2xl max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold">Mercado Clandestino & Arsenal</h2>
+          <p class="text-xs opacity-75">Invista suas moedas em multiplicadores, descontos, scanner e molduras.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 font-code font-bold text-xs">
+            🪙 <span id="shopCoinsDisplay">0</span>
+          </span>
+          <button id="btnCloseShop" type="button" class="btn-tactile w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold" aria-label="Fechar">✕</button>
+        </div>
+      </div>
+
+      <div id="shopItemsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto py-3 pr-1 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: NODE COMPROMISED CELEBRATION -->
+  <div id="solvedModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="cyber-panel rounded-3xl max-w-md w-full p-6 border-2 border-emerald-400/60 text-center shadow-2xl">
+      <div class="text-5xl mb-2">🔓</div>
+      <span class="inline-block px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-code text-xs font-bold uppercase tracking-wider">
+        Assinatura SHA-256 Validada!
+      </span>
+      <h2 id="solvedModalTitle" class="text-2xl font-extrabold mt-2">Nó Comprometido!</h2>
+      <p id="solvedModalExplanation" class="text-xs opacity-85 mt-1.5 leading-relaxed"></p>
+
+      <div class="my-4 p-3 rounded-2xl bg-black/45 border border-amber-400/35">
+        <div class="text-xs opacity-70">Recompensa de Infiltração</div>
+        <div id="solvedRewardCoins" class="font-code text-2xl font-extrabold text-amber-300 mt-0.5">+25 🪙</div>
+      </div>
+
+      <button id="btnProceedNextNode" type="button" class="btn-tactile w-full py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-300 text-slate-950 font-extrabold text-sm shadow-lg">
+        Avançar para Próximo Nó ➔
+      </button>
+      <button id="btnStayOnNode" type="button" class="mt-2 w-full py-2 rounded-xl text-xs font-bold opacity-75 hover:opacity-100 hover:bg-white/10">
+        Ficar neste nó
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: COMO JOGAR -->
+  <div id="helpModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="cyber-panel rounded-3xl max-w-lg w-full p-5 sm:p-6 border border-sky-400/40 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <h2 class="text-xl font-extrabold flex items-center gap-2"><img src="icon.svg" alt="" class="w-7 h-7 rounded-lg" /> Como Jogar</h2>
+        <button id="btnCloseHelp" type="button" class="btn-tactile w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold" aria-label="Fechar">✕</button>
+      </div>
+      <p class="text-sm opacity-85 mt-3">Você é um hacker do bem. Cada <strong>nó</strong> é um site vulnerável escondendo uma <strong>chave secreta</strong> no formato <span class="font-code text-emerald-300">VB{...}</span>. Ache a chave e invada o próximo nó!</p>
+      <ol class="mt-4 space-y-2.5 text-sm">
+        <li class="flex gap-3"><span class="shrink-0 w-7 h-7 rounded-full bg-emerald-500/25 text-emerald-300 font-bold flex items-center justify-center">1</span><span><strong>Leia a missão 🎯</strong> — ela diz onde procurar.</span></li>
+        <li class="flex gap-3"><span class="shrink-0 w-7 h-7 rounded-full bg-emerald-500/25 text-emerald-300 font-bold flex items-center justify-center">2</span><span><strong>Investigue com as 4 abas:</strong><br>🌐 <em>Interface</em> — a página e seus formulários<br>&lt;/&gt; <em>Código-Fonte</em> — o HTML/JS escondido<br>📡 <em>Cookies &amp; Headers</em> — altere valores e clique em <strong>Reenviar</strong><br>💻 <em>Decoder</em> — traduz Base64, Hex, ROT13, XOR…</span></li>
+        <li class="flex gap-3"><span class="shrink-0 w-7 h-7 rounded-full bg-emerald-500/25 text-emerald-300 font-bold flex items-center justify-center">3</span><span>Alguns nós pedem que você mude o <strong>endereço</strong> na barra <span class="font-code text-emerald-300">node://</span> e clique em <strong>GET</strong>.</span></li>
+        <li class="flex gap-3"><span class="shrink-0 w-7 h-7 rounded-full bg-emerald-500/25 text-emerald-300 font-bold flex items-center justify-center">4</span><span>Achou a chave? Clique em <strong>✅ Usar esta chave</strong> (ou cole no campo 🔐) e aperte <strong>AUTENTICAR</strong>.</span></li>
+        <li class="flex gap-3"><span class="shrink-0 w-7 h-7 rounded-full bg-amber-500/25 text-amber-300 font-bold flex items-center justify-center">5</span><span>Travou? Compre <strong>💡 dicas</strong> com moedas 🪙. Cada nó resolvido rende moedas, que também compram melhorias na <strong>Loja</strong>.</span></li>
+      </ol>
+      <div class="mt-4 p-3 rounded-xl bg-black/40 border border-white/10 text-xs opacity-85">
+        <strong>Níveis:</strong> 🟢 Fácil → 🟡 Médio → 🔴 Difícil → 🔮 Mago (30 nós cada). Toque no seletor <strong>Nó XX/30</strong> no topo para ver o mapa completo. Seu progresso é salvo automaticamente neste navegador.
+      </div>
+      <button id="btnHelpStart" type="button" class="btn-tactile mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-300 text-slate-950 font-extrabold text-sm">
+        Entendi, bora jogar! 🚀
+      </button>
+    </div>
+  </div>
+
+  <script src="fases.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. PWA MANIFEST & SERVICE WORKER
+      // Manifest e ícones são arquivos reais (manifest.webmanifest, icon.svg, icons/).
+      // Service worker precisa ser um arquivo do mesmo domínio — blob: URLs são recusadas pelo navegador.
+      try {
+        if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+          window.addEventListener('load', function () {
+            navigator.serviceWorker.register('sw.js').catch(function () {});
+          });
+        }
+      } catch (e) {}
+
+
+      /* === GAME_CORE_START === (sem DOM: o teste test/validar-fases.js executa este trecho no Node) */
+      // 2. REAL WEB CRYPTO SHA-256 + SYNC FALLBACK
+      var CryptoVault = (function () {
+        var GLOBAL_SALT = 'VOIDBREACH_PROTO_ZERO_2026';
+
+        // Aceita a linha inteira colada (ex: "CHAVE: vb{easy_x_01}") e ignora maiúsculas/minúsculas.
+        // Todas as chaves do jogo são maiúsculas, então normalizar para upper é seguro.
+        function normalizeKey(str) {
+          var s = (str || '').toString().trim();
+          var m = s.match(/vb\{[^}\s]*\}/i);
+          if (m) s = m[0];
+          return s.toUpperCase();
+        }
+
+        function sha256Fallback(ascii) {
+          function rightRotate(value, amount) {
+            return (value >>> amount) | (value << (32 - amount));
+          }
+          var mathPow = Math.pow;
+          var maxWord = mathPow(2, 32);
+          var result = '';
+          var words = [];
+          var asciiBitLength = ascii.length * 8;
+          var hash = [];
+          var k = [];
+          var primeCounter = 0;
+          var isComposite = {};
+          for (var candidate = 2; primeCounter < 64; candidate++) {
+            if (!isComposite[candidate]) {
+              for (var i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+              hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+              k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+            }
+          }
+          ascii += '\x80';
+          while ((ascii.length % 64) - 56) ascii += '\x00';
+          for (var idx = 0; idx < ascii.length; idx++) {
+            var j = ascii.charCodeAt(idx);
+            words[idx >> 2] |= j << (((3 - idx) % 4) * 8);
+          }
+          words[words.length] = (asciiBitLength / maxWord) | 0;
+          words[words.length] = asciiBitLength;
+
+          for (var p = 0; p < words.length; ) {
+            var w = words.slice(p, (p += 16));
+            var oldHash = hash.slice(0);
+            for (var r = 0; r < 64; r++) {
+              var w15 = w[r - 15], w2 = w[r - 2];
+              var a = hash[0], e = hash[4];
+              var temp1 =
+                hash[7] +
+                (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) +
+                ((e & hash[5]) ^ (~e & hash[6])) +
+                k[r] +
+                (w[r] =
+                  r < 16
+                    ? w[r]
+                    : (w[r - 16] +
+                        (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
+                        w[r - 7] +
+                        (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) |
+                      0);
+              var temp2 =
+                (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
+                ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+              hash.unshift((temp1 + temp2) | 0);
+              hash[4] = (hash[4] + temp1) | 0;
+              hash.pop();
+            }
+            for (var q = 0; q < 8; q++) hash[q] = (hash[q] + oldHash[q]) | 0;
+          }
+          for (var m = 0; m < 8; m++) {
+            for (var n = 3; n + 1; n--) {
+              var b = (hash[m] >> (n * 8)) & 255;
+              result += (b < 16 ? '0' : '') + b.toString(16);
+            }
+          }
+          return result;
+        }
+
+        function computeSaltedHash(globalId, candidatePlain) {
+          var clean = normalizeKey(candidatePlain);
+          var payload = GLOBAL_SALT + ':N' + String(globalId).padStart(3, '0') + ':' + clean;
+          if (window.crypto && window.crypto.subtle && window.TextEncoder) {
+            try {
+              var data = new TextEncoder().encode(payload);
+              return window.crypto.subtle.digest('SHA-256', data).then(function (digest) {
+                return Array.from(new Uint8Array(digest))
+                  .map(function (b) { return b.toString(16).padStart(2, '0'); })
+                  .join('');
+              }).catch(function () {
+                return sha256Fallback(payload);
+              });
+            } catch (e) {}
+          }
+          return Promise.resolve(sha256Fallback(payload));
+        }
+
+        function computeSyncHash(globalId, candidatePlain) {
+          var clean = normalizeKey(candidatePlain);
+          var payload = GLOBAL_SALT + ':N' + String(globalId).padStart(3, '0') + ':' + clean;
+          return sha256Fallback(payload);
+        }
+
+        // Prova de resolução: só pode ser gerada a partir da chave correta do nó.
+        function proofFor(globalId, plain) {
+          return sha256Fallback('PROOF|' + GLOBAL_SALT + '|' + globalId + '|' + normalizeKey(plain)).slice(0, 32);
+        }
+        // Assinatura da economia (moedas, compras, dicas) para detectar edição manual do save.
+        function sign(obj) {
+          return sha256Fallback('ECO|' + GLOBAL_SALT + '|' + unescape(encodeURIComponent(JSON.stringify(obj)))).slice(0, 32);
+        }
+
+        return {
+          normalizeKey: normalizeKey,
+          computeSaltedHash: computeSaltedHash,
+          computeSyncHash: computeSyncHash,
+          proofFor: proofFor,
+          sign: sign,
+          sha256: function (s) { return sha256Fallback(unescape(encodeURIComponent(s))); }
+        };
+      })();
+
+      // 3. WEB AUDIO SYNTHESIZER
+      var AudioEngine = (function () {
+        var ctx = null;
+        var muted = false;
+
+        function getCtx() {
+          if (!ctx) {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (AC) ctx = new AC();
+          }
+          if (ctx && ctx.state === 'suspended') ctx.resume();
+          return ctx;
+        }
+
+        function tone(freq, type, dur, vol, delay) {
+          if (muted) return;
+          try {
+            var c = getCtx();
+            if (!c) return;
+            var osc = c.createOscillator();
+            var g = c.createGain();
+            osc.type = type || 'sine';
+            osc.frequency.setValueAtTime(freq, c.currentTime + (delay || 0));
+            g.gain.setValueAtTime(0.001, c.currentTime + (delay || 0));
+            g.gain.exponentialRampToValueAtTime(vol || 0.12, c.currentTime + (delay || 0) + 0.01);
+            g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + (delay || 0) + (dur || 0.12));
+            osc.connect(g);
+            g.connect(c.destination);
+            osc.start(c.currentTime + (delay || 0));
+            osc.stop(c.currentTime + (delay || 0) + (dur || 0.12) + 0.02);
+          } catch (e) {}
+        }
+
+        return {
+          toggleMute: function () { muted = !muted; return muted; },
+          setMuted: function (v) { muted = !!v; },
+          click: function () { tone(540, 'triangle', 0.07, 0.1, 0); },
+          hint: function () { tone(587.33, 'triangle', 0.13, 0.12, 0); tone(880, 'sine', 0.18, 0.12, 0.08); },
+          error: function () { tone(165, 'sawtooth', 0.16, 0.12, 0); tone(130, 'sawtooth', 0.2, 0.12, 0.12); },
+          sticker: function () { tone(660, 'sine', 0.09, 0.1, 0); tone(990, 'triangle', 0.14, 0.1, 0.06); },
+          solved: function () {
+            [523.25, 659.25, 783.99, 1046.5].forEach(function (f, idx) {
+              tone(f, 'triangle', 0.25, 0.14, idx * 0.085);
+            });
+          }
+        };
+      })();
+
+      // 4. SHOP ITEMS
+      var SHOP_ITEMS = [
+        {
+          id: 'double_coins',
+          type: 'upgrade',
+          icon: '💰',
+          name: 'Minerador Quântico 2x',
+          price: 150,
+          desc: 'Dobra permanentemente todas as moedas ganhas ao comprometer novos nós.'
+        },
+        {
+          id: 'hint_discount',
+          type: 'upgrade',
+          icon: '🏷️',
+          name: 'Acesso Zero-Day (-20% Dicas)',
+          price: 110,
+          desc: 'Reduz em 20% o custo de todas as 3 camadas de inteligência.'
+        },
+        {
+          id: 'vuln_scanner',
+          type: 'upgrade',
+          icon: '📡',
+          name: 'Scanner de Vetor Ativo',
+          price: 95,
+          desc: 'Destaca automaticamente qual aba do sandbox contém a superfície de ataque.'
+        },
+        {
+          id: 'frame_emerald',
+          type: 'frame',
+          icon: '💚',
+          name: 'Aro Matrix Phosphor',
+          price: 85,
+          desc: 'Contorno verde-esmeralda de invasor veterano.',
+          ringClass: 'ring-emerald-400 shadow-lg shadow-emerald-500/30'
+        },
+        {
+          id: 'frame_gold',
+          type: 'frame',
+          icon: '👑',
+          name: 'Aro Soberano Dourado',
+          price: 120,
+          desc: 'Moldura dourada para especialistas de elite.',
+          ringClass: 'ring-amber-400 shadow-lg shadow-amber-500/30'
+        },
+        {
+          id: 'frame_mago',
+          type: 'frame',
+          icon: '🔮',
+          name: 'Aro Arcano do Mago',
+          price: 170,
+          desc: 'Aura púrpura reservada aos mestres do perfil Mago.',
+          ringClass: 'ring-purple-400 shadow-lg shadow-purple-500/35'
+        }
+      ];
+
+      // 5. ENCODING HELPERS
+      function toBase64(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+      }
+      function toHex(str) {
+        return Array.from(str).map(function (c) {
+          return c.charCodeAt(0).toString(16).padStart(2, '0');
+        }).join('');
+      }
+      function toRot13(str) {
+        return str.replace(/[a-zA-Z]/g, function (c) {
+          var base = c <= 'Z' ? 65 : 97;
+          return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
+        });
+      }
+      function xorHex(str, keyByte) {
+        return Array.from(str).map(function (c) {
+          return (c.charCodeAt(0) ^ keyByte).toString(16).padStart(2, '0');
+        }).join('');
+      }
+
+      // 6. 120 CHALLENGES (30 Fácil, 30 Médio, 30 Difícil, 30 Mago)
+
+      // Respostas ficam fora dos objetos de nó; usadas só para conferir as provas de progresso.
+      var ANSWERS = {};
+
+      function registerNode(raw) {
+        var answerHash = CryptoVault.computeSyncHash(raw.globalId, raw.plainAnswer);
+        ANSWERS[raw.globalId] = raw.plainAnswer;
+
+
+        return {
+          globalId: raw.globalId,
+          profile: raw.profile,
+          localIndex: raw.localIndex,
+          vector: raw.vector,
+          surfaceTab: raw.surfaceTab,
+          title: raw.title,
+          address: raw.address,
+          briefing: raw.briefing,
+          answerHash: answerHash,
+          hints: raw.hints,
+          sourceCode: raw.sourceCode,
+          defaultHeaders: {
+            loggedin: '0',
+            role: 'guest',
+            referer: 'https://public.void/',
+            userAgent: 'VoidBrowser/4.2',
+            xff: '198.51.100.42',
+            auth: 'false'
+          },
+          simSpec: raw.simSpec,
+          solution: raw.solution || null
+        };
+      }
+
+      function buildNodeScenario(cfg) {
+        var globalId = cfg.globalId;
+        var profile = cfg.profile;
+        var localIndex = cfg.localIndex;
+        var arch = cfg.arch;
+        var flag = cfg.flag;
+        var addr = cfg.addr;
+        var word = cfg.word;
+        var padLocal = cfg.padLocal;
+
+        var briefing = '';
+        var hints = [];
+        var method = '';
+        var sourceCode = '';
+        var surfaceTab = 'web';
+        var simSpec = { type: arch.type, flag: flag, addr: addr, word: word, padLocal: padLocal };
+
+        switch (arch.type) {
+          case 'html_comment': {
+            surfaceTab = 'source';
+            briefing = 'O administrador deixou anotações de depuração no HTML deste nó. Inspecione o código-fonte para recuperar a chave.';
+            sourceCode = '<!DOCTYPE html>\n<html>\n<head><title>Nó ' + padLocal + '</title></head>\n<body>\n  <h2>Terminal Público #' + padLocal + '</h2>\n  <p>Acesso restrito a operadores autenticados.</p>\n  <!-- TODO: remover antes de produção: CHAVE = ' + flag + ' -->\n</body>\n</html>';
+            hints = [
+              'Abra a aba "</> Código-Fonte" logo acima da tela do alvo.',
+              'Procure por um comentário HTML (<!-- ... -->) no final do documento.',
+              'A chave completa começa com VB{ e é: ' + flag
+            ];
+            method = 'Abrir "</> Código-Fonte" e copiar a chave do comentário HTML: ' + flag;
+            break;
+          }
+          case 'css_hidden': {
+            surfaceTab = 'source';
+            briefing = 'Há um elemento renderizado na interface do nó com visibilidade oculta via CSS. Leia o código-fonte para revelá-lo.';
+            sourceCode = '<div class="panel">\n  <p>Status do Servidor: ONLINE</p>\n  <span style="display:none; opacity:0;" id="vault-secret">' + flag + '</span>\n</div>';
+            hints = [
+              'Alguns textos existem na página mas estão escondidos com style="display:none".',
+              'Verifique a tag <span> dentro do "</> Código-Fonte".',
+              'Chave oculta no DOM: ' + flag
+            ];
+            method = 'Ler o elemento oculto <span style="display:none"> no Código-Fonte -> ' + flag;
+            break;
+          }
+          case 'robots_path': {
+            surfaceTab = 'web';
+            var secretPath = addr + '/robots.txt';
+            briefing = 'Todo servidor web costuma listar diretórios sensíveis no arquivo /robots.txt. Tente acessá-lo pela barra de endereço!';
+            sourceCode = '# Dica de reconhecimento:\n# Tente requisitar node://' + secretPath + ' na barra de endereço superior.';
+            simSpec.targetAddress = secretPath;
+            hints = [
+              'Na barra de endereço no topo (node://' + addr + '), adicione /robots.txt no final e clique em GET.',
+              'Acesse node://' + secretPath + ' para ler o diretório bloqueado.',
+              'Chave exibida em robots.txt: ' + flag
+            ];
+            method = 'Navegar para node://' + secretPath + ' na barra de endereço -> ' + flag;
+            break;
+          }
+          case 'base64_source': {
+            surfaceTab = 'console';
+            var b64 = toBase64(flag);
+            briefing = 'Uma variável JavaScript expõe um token codificado em Base64. Use o Console / Decoder embutido para traduzi-lo.';
+            sourceCode = '// Token de sessão legado\nconst LEGACY_TOKEN = "' + b64 + '";';
+            hints = [
+              'Copie o valor de LEGACY_TOKEN na aba "</> Código-Fonte".',
+              'Cole "' + b64 + '" na aba "💻 Console / Decoder" e clique em [B64 Dec].',
+              'Resultado decodificado: ' + flag
+            ];
+            method = 'Decodificar Base64 "' + b64 + '" -> ' + flag;
+            break;
+          }
+          case 'url_param': {
+            surfaceTab = 'web';
+            var targetAddr = addr + '?admin=true';
+            briefing = 'A interface verifica um parâmetro GET na URL para liberar o painel de diagnóstico.';
+            sourceCode = '// Backend router\nif (request.query.admin === "true") {\n  renderSecret("' + flag + '");\n} else {\n  render("Acesso negado. Adicione ?admin=true na URL");\n}';
+            simSpec.targetAddress = targetAddr;
+            hints = [
+              'Veja a condição no "</> Código-Fonte": request.query.admin === "true".',
+              'Altere o endereço no topo para ' + targetAddr + ' e aperte GET.',
+              'Chave revelada: ' + flag
+            ];
+            method = 'Adicionar ?admin=true na barra de endereço -> ' + flag;
+            break;
+          }
+          case 'js_client': {
+            surfaceTab = 'source';
+            briefing = 'A validação de senha deste formulário ocorre inteiramente no navegador do cliente. Leia o script!';
+            sourceCode = 'function checkPass(input) {\n  const secret = "' + flag + '";\n  return input === secret;\n}';
+            hints = [
+              'Nunca confie em validação de senha no lado do cliente. Abra "</> Código-Fonte".',
+              'Veja a constante "secret" dentro da função checkPass().',
+              'Senha hardcoded: ' + flag
+            ];
+            method = 'Extrair a string secret diretamente do JavaScript -> ' + flag;
+            break;
+          }
+          case 'rot13_source': {
+            surfaceTab = 'console';
+            var rot = toRot13(flag);
+            briefing = 'O log do sistema ofuscou a chave usando cifra ROT13. Use o botão ROT13 no Console / Decoder.';
+            sourceCode = '[AUDIT_LOG] obfuscated_key = "' + rot + '" (cipher: ROT13)';
+            hints = [
+              'Pegue a string obfuscated_key no "</> Código-Fonte".',
+              'Cole "' + rot + '" na aba "💻 Console / Decoder" e clique em [ROT13].',
+              'Chave original: ' + flag
+            ];
+            method = 'Aplicar ROT13 sobre "' + rot + '" -> ' + flag;
+            break;
+          }
+          case 'backup_file': {
+            surfaceTab = 'web';
+            var bakAddr = addr + '/config.bak';
+            briefing = 'Editores de texto costumam deixar arquivos de backup (.bak) acessíveis publicamente.';
+            sourceCode = '<!-- Servidor web com listagem de backup ativa -->\n<!-- Arquivo suspeito: config.bak -->';
+            simSpec.targetAddress = bakAddr;
+            hints = [
+              'Tente acessar o arquivo config.bak na barra de endereço do nó.',
+              'Digite ' + bakAddr + ' no topo e clique em GET.',
+              'Chave dentro de config.bak: ' + flag
+            ];
+            method = 'Requisitar node://' + bakAddr + ' -> ' + flag;
+            break;
+          }
+          case 'hex_source': {
+            surfaceTab = 'console';
+            var hex = toHex(flag);
+            briefing = 'Um dump de memória deixou a chave em formato Hexadecimal. Converta-a no Decoder.';
+            sourceCode = 'MEMORY_DUMP [0x004F]: ' + hex;
+            hints = [
+              'Copie a sequência hexadecimal na aba "</> Código-Fonte".',
+              'Abra "💻 Console / Decoder", cole o hex e clique em [Hex Dec].',
+              'Texto ASCII resultante: ' + flag
+            ];
+            method = 'Converter Hexadecimal para ASCII -> ' + flag;
+            break;
+          }
+          case 'data_attr': {
+            surfaceTab = 'source';
+            briefing = 'Um botão desabilitado na interface carrega um atributo HTML5 data-key.';
+            sourceCode = '<button disabled data-key="' + flag + '" class="btn-locked">Cofre Bloqueado</button>';
+            hints = [
+              'Inspecione o elemento <button> na aba "</> Código-Fonte".',
+              'Leia o valor do atributo data-key="...".',
+              'Valor de data-key: ' + flag
+            ];
+            method = 'Ler atributo data-key no HTML -> ' + flag;
+            break;
+          }
+          case 'cookie_loggedin': {
+            surfaceTab = 'headers';
+            briefing = 'O servidor controla sua autenticação através de um cookie simples chamado "loggedin".';
+            sourceCode = '// Server Middleware\nif (req.cookies.loggedin === "1") {\n  send("' + flag + '");\n} else {\n  send("403 Forbidden: loggedin=0");\n}';
+            hints = [
+              'Abra a aba "📡 Cookies & Headers".',
+              'Mude o campo "Cookie: loggedin" de 0 para 1 e clique em [🚀 Reenviar Request].',
+              'Chave liberada: ' + flag
+            ];
+            method = 'Alterar Cookie loggedin=1 e reenviar requisição -> ' + flag;
+            break;
+          }
+          case 'header_referer': {
+            surfaceTab = 'headers';
+            briefing = 'Este painel só aceita requisições vindas internamente de "https://intranet.void/".';
+            sourceCode = 'if (req.headers["referer"] === "https://intranet.void/") {\n  send("' + flag + '");\n} else {\n  send("Acesso bloqueado: Referer inválido");\n}';
+            hints = [
+              'Vá até a aba "📡 Cookies & Headers".',
+              'Altere "Header: Referer" para https://intranet.void/ e clique em [🚀 Reenviar Request].',
+              'Chave revelada: ' + flag
+            ];
+            method = 'Definir Referer: https://intranet.void/ -> ' + flag;
+            break;
+          }
+          case 'header_ua': {
+            surfaceTab = 'headers';
+            briefing = 'O gateway exige que o cliente se identifique com o User-Agent "VoidAdminCLI/9.0".';
+            sourceCode = 'if (req.headers["user-agent"] === "VoidAdminCLI/9.0") {\n  send("' + flag + '");\n}';
+            hints = [
+              'Abra "📡 Cookies & Headers".',
+              'Troque "Header: User-Agent" para VoidAdminCLI/9.0 e reenvie a requisição.',
+              'Chave obtida: ' + flag
+            ];
+            method = 'Definir User-Agent: VoidAdminCLI/9.0 -> ' + flag;
+            break;
+          }
+          case 'cookie_role': {
+            surfaceTab = 'headers';
+            briefing = 'Seu perfil atual é "guest". Escale seus privilégios modificando o cookie session_role.';
+            sourceCode = 'if (req.cookies.session_role === "admin" || req.cookies.session_role === "root") {\n  grantKey("' + flag + '");\n}';
+            hints = [
+              'Acesse "📡 Cookies & Headers".',
+              'Altere "Cookie: session_role" de guest para admin e clique em [🚀 Reenviar Request].',
+              'Chave de administrador: ' + flag
+            ];
+            method = 'Alterar Cookie session_role=admin -> ' + flag;
+            break;
+          }
+          case 'path_traversal': {
+            surfaceTab = 'web';
+            briefing = 'O visualizador de arquivos lê caminhos relativos sem sanitizar "../".';
+            sourceCode = '// GET parameter ?file=welcome.txt\nconst filePath = "/var/www/public/" + req.query.file;\n// A chave está em /var/secret.key (use ../../secret.key)';
+            hints = [
+              'Na Interface do Nó, digite ../../secret.key no campo de leitura de arquivo.',
+              'Subir dois diretórios (../../secret.key) alcança o arquivo protegido.',
+              'Conteúdo de secret.key: ' + flag
+            ];
+            method = 'Path Traversal com ../../secret.key -> ' + flag;
+            break;
+          }
+          case 'header_debug': {
+            surfaceTab = 'headers';
+            briefing = 'Engenheiros ativam logs verbosos enviando o cabeçalho Authorization / X-Debug como "true".';
+            sourceCode = 'if (req.headers["x-debug"] === "true") {\n  res.dumpEnv({ MASTER_KEY: "' + flag + '" });\n}';
+            hints = [
+              'Vá em "📡 Cookies & Headers".',
+              'Mude "Header: Authorization / X-Debug" para true e clique em [🚀 Reenviar Request].',
+              'Dump de ambiente: ' + flag
+            ];
+            method = 'Definir X-Debug: true -> ' + flag;
+            break;
+          }
+          case 'form_bypass': {
+            surfaceTab = 'web';
+            briefing = 'O formulário pede um PIN numérico, mas o backend aceita qualquer valor acima de 9000.';
+            sourceCode = 'if (Number(body.pin) > 9000) {\n  return "' + flag + '";\n}';
+            hints = [
+              'Use o formulário na "🌐 Interface do Nó".',
+              'Envie um número maior que 9000 (ex: 9999).',
+              'Chave retornada: ' + flag
+            ];
+            method = 'Enviar PIN > 9000 (ex: 9999) no formulário -> ' + flag;
+            break;
+          }
+          case 'b64_url': {
+            surfaceTab = 'console';
+            var encoded = encodeURIComponent(toBase64(flag));
+            briefing = 'O token interceptado passou por URL-Encoding depois de ser codificado em Base64.';
+            sourceCode = 'INTERCEPTED_PAYLOAD = "' + encoded + '"';
+            hints = [
+              'Copie o INTERCEPTED_PAYLOAD na aba "</> Código-Fonte".',
+              'No "💻 Console / Decoder", clique primeiro em [URL Dec] e depois em [B64 Dec].',
+              'Chave decodificada: ' + flag
+            ];
+            method = 'URL Decode seguido de Base64 Decode -> ' + flag;
+            break;
+          }
+          case 'api_endpoint': {
+            surfaceTab = 'web';
+            var apiAddr = addr + '/api/v1/keys';
+            briefing = 'O frontend consulta uma rota REST interna que ficou aberta sem autenticação.';
+            sourceCode = 'fetch("node://' + apiAddr + '")\n  .then(r => r.json())';
+            simSpec.targetAddress = apiAddr;
+            hints = [
+              'Veja a URL chamada no fetch() dentro do "</> Código-Fonte".',
+              'Navegue para ' + apiAddr + ' na barra de endereço superior.',
+              'Resposta JSON da API: ' + flag
+            ];
+            method = 'Consultar endpoint node://' + apiAddr + ' -> ' + flag;
+            break;
+          }
+          case 'header_xff': {
+            surfaceTab = 'headers';
+            briefing = 'O painel administrativo só aceita conexões originadas de localhost (127.0.0.1).';
+            sourceCode = 'const clientIp = req.headers["x-forwarded-for"] || req.ip;\nif (clientIp === "127.0.0.1") {\n  send("' + flag + '");\n}';
+            hints = [
+              'O servidor confia no cabeçalho HTTP X-Forwarded-For.',
+              'Em "📡 Cookies & Headers", mude X-Forwarded-For para 127.0.0.1 e reenvie.',
+              'Chave de localhost: ' + flag
+            ];
+            method = 'Definir X-Forwarded-For: 127.0.0.1 -> ' + flag;
+            break;
+          }
+          case 'sqli_auth': {
+            surfaceTab = 'web';
+            briefing = 'A consulta SQL concatena diretamente o campo usuário sem prepared statements.';
+            sourceCode = 'const query = "SELECT * FROM users WHERE user = \'" + inputUser + "\' AND active = 1";\n// Injete uma condição sempre verdadeira (ex: \' OR \'1\'=\'1)';
+            hints = [
+              'Na "🌐 Interface do Nó", insira uma injeção SQL clássica no campo de usuário.',
+              'Experimente digitar: \' OR \'1\'=\'1',
+              'Bypass SQLi bem-sucedido: ' + flag
+            ];
+            method = 'SQL Injection com \' OR \'1\'=\'1 -> ' + flag;
+            break;
+          }
+          case 'cmd_inj': {
+            surfaceTab = 'web';
+            briefing = 'O utilitário de diagnóstico executa "ping -c 1 <host>" diretamente no shell do servidor.';
+            sourceCode = 'exec("ping -c 1 " + userHost);\n// Encadeie outro comando usando ; ou && (ex: 127.0.0.1; cat key.txt)';
+            hints = [
+              'Use ponto-e-vírgula (;) ou && para executar um segundo comando após o IP.',
+              'Digite na Interface do Nó: 127.0.0.1; cat key.txt',
+              'Saída do shell: ' + flag
+            ];
+            method = 'Command Injection com 127.0.0.1; cat key.txt -> ' + flag;
+            break;
+          }
+          case 'jwt_none': {
+            surfaceTab = 'web';
+            var fakeJwt = toBase64('{"alg":"HS256","typ":"JWT"}') + '.' + toBase64('{"user":"guest","admin":false}') + '.sig123';
+            briefing = 'O servidor aceita payloads JWT modificados quando "admin":true está presente.';
+            sourceCode = '// Token atual: ' + fakeJwt + '\n// Decodifique no Console/Decoder ou envie payload JWT com "admin":true';
+            hints = [
+              'Analise o JWT na aba "💻 Console / Decoder" usando [JWT].',
+              'Envie um token ou payload contendo "admin":true na Interface do Nó.',
+              'Chave JWT forjada: ' + flag
+            ];
+            method = 'Forjar payload JWT com "admin":true -> ' + flag;
+            break;
+          }
+          case 'sqli_union': {
+            surfaceTab = 'web';
+            briefing = 'O buscador de registros é vulnerável a UNION SELECT. Extraia a coluna secreta da tabela vault.';
+            sourceCode = 'SELECT id, title FROM logs WHERE title LIKE \'%<busca>%\';\n-- Tabela oculta: vault (coluna: secret_key)';
+            hints = [
+              'Use UNION SELECT para unir os resultados da tabela vault.',
+              'Digite na busca: \' UNION SELECT 1, secret_key FROM vault --',
+              'Chave extraída via UNION: ' + flag
+            ];
+            method = 'SQLi UNION SELECT secret_key FROM vault -> ' + flag;
+            break;
+          }
+          case 'lfi_b64': {
+            surfaceTab = 'web';
+            var b64Lfi = toBase64('<?php $KEY = "' + flag + '"; ?>');
+            briefing = 'O carregador de módulos permite ler arquivos em Base64 via filtro php://filter.';
+            sourceCode = 'include($_GET[\'page\']);\n// Use php://filter/convert.base64-encode/resource=config.php';
+            simSpec.b64Leak = b64Lfi;
+            hints = [
+              'Na Interface do Nó, solicite php://filter/convert.base64-encode/resource=config.php.',
+              'Depois copie o Base64 retornado e decodifique na aba "💻 Console / Decoder".',
+              'Chave dentro de config.php: ' + flag
+            ];
+            method = 'LFI php://filter -> Base64 Decode -> ' + flag;
+            break;
+          }
+          case 'xss_probe': {
+            surfaceTab = 'web';
+            briefing = 'O bot moderador visita sua mensagem refletida. Injete uma tag de script ou evento para capturar a sessão.';
+            sourceCode = 'res.send("<div>Preview: " + req.query.msg + "</div>"); // Sem sanitização HTML!';
+            hints = [
+              'Envie uma payload HTML/JS contendo <script> ou onerror= na Interface do Nó.',
+              'Exemplo: <img src=x onerror=alert(1)>',
+              'Cookie capturado do bot: ' + flag
+            ];
+            method = 'XSS Refletido com <img src=x onerror=alert(1)> -> ' + flag;
+            break;
+          }
+          case 'idor_uid': {
+            surfaceTab = 'web';
+            var idorAddr = addr + '/profile?uid=0';
+            briefing = 'Os perfis de usuário são indexados sequencialmente por ?uid=. O Arquiteto do sistema possui uid=0.';
+            sourceCode = '// Rota atual: ' + addr + '/profile?uid=1042\n// Altere o parâmetro uid para 0 na barra de endereço!';
+            simSpec.targetAddress = idorAddr;
+            hints = [
+              'IDOR (Insecure Direct Object Reference): troque o ID do usuário na URL.',
+              'Acesse ' + idorAddr + ' na barra de endereço superior.',
+              'Perfil uid=0 expõe: ' + flag
+            ];
+            method = 'IDOR alterando ?uid=0 na URL -> ' + flag;
+            break;
+          }
+          case 'chain_cookie_ref': {
+            surfaceTab = 'headers';
+            briefing = 'Defesa em profundidade: exige simultaneamente cookie session_role=admin E Referer https://core.void/.';
+            sourceCode = 'if (req.cookies.session_role === "admin" && req.headers.referer === "https://core.void/") {\n  send("' + flag + '");\n}';
+            hints = [
+              'Abra "📡 Cookies & Headers" e configure dois campos ao mesmo tempo.',
+              'Defina Cookie: session_role = admin e Header: Referer = https://core.void/ e reenvie.',
+              'Chave liberada: ' + flag
+            ];
+            method = 'Combinar session_role=admin + Referer=https://core.void/ -> ' + flag;
+            break;
+          }
+          case 'regex_bypass': {
+            surfaceTab = 'web';
+            briefing = 'O filtro bloqueia a palavra exata "admin" em minúsculas, mas o backend converte para lowercase depois.';
+            sourceCode = 'if (input.includes("admin")) throw "Bloqueado pelo WAF";\nif (input.toLowerCase() === "admin") return "' + flag + '";';
+            hints = [
+              'O filtro diferencia maiúsculas de minúsculas, mas a verificação final usa toLowerCase().',
+              'Envie ADMIN ou AdMiN no formulário da Interface do Nó.',
+              'Bypass de case-sensitivity: ' + flag
+            ];
+            method = 'Enviar ADMIN (maiúsculas) para driblar filtro case-sensitive -> ' + flag;
+            break;
+          }
+          case 'mime_bypass': {
+            surfaceTab = 'web';
+            briefing = 'O upload valida apenas a extensão dupla ".php.png" ou cabeçalho image/png no nome do arquivo.';
+            sourceCode = 'if (filename.endsWith(".png") && filename.includes(".php")) {\n  executePayload("' + flag + '");\n}';
+            hints = [
+              'Envie um nome de arquivo com extensão dupla na Interface do Nó.',
+              'Exemplo: shell.php.png',
+              'Upload executado: ' + flag
+            ];
+            method = 'Bypass de upload com extensão dupla shell.php.png -> ' + flag;
+            break;
+          }
+          case 'blind_sqli': {
+            surfaceTab = 'web';
+            briefing = 'Sem mensagens de erro visíveis! Teste condições booleanas para confirmar se o registro secreto existe.';
+            sourceCode = '// Retorna "EXISTE" se a condição SQL for verdadeira\nSELECT 1 FROM secrets WHERE id=1 AND <condicao>;';
+            hints = [
+              'Injete uma expressão booleana verdadeira na busca da Interface do Nó.',
+              'Envie: 1=1 para forçar o retorno verdadeiro do oráculo.',
+              'Oráculo liberou: ' + flag
+            ];
+            method = 'Blind SQLi booleano com 1=1 -> ' + flag;
+            break;
+          }
+          case 'type_juggling': {
+            surfaceTab = 'web';
+            briefing = 'Comparação frouxa (==): qualquer hash iniciado em "0e" seguido apenas de dígitos equivale a zero!';
+            sourceCode = '// if ($inputHash == "0e462097431906509019562988736854")\n// Envie uma string magic hash iniciada por 0e123456';
+            hints = [
+              'Em comparação frouxa (==), "0e123456" é interpretado como 0 elevado a potência = 0.',
+              'Envie 0e123456 (ou 240610708) no campo da Interface do Nó.',
+              'Colisão Type Juggling: ' + flag
+            ];
+            method = 'Explorar Type Juggling enviando magic hash 0e123456 -> ' + flag;
+            break;
+          }
+          case 'ssrf_meta': {
+            surfaceTab = 'web';
+            briefing = 'O buscador de webhooks permite requisitar URLs internas, incluindo o serviço de metadados cloud.';
+            sourceCode = '// Fetcher interno sem bloqueio de IP privado\n// Alvo de metadados: http://169.254.169.254/latest/meta-data/';
+            hints = [
+              'SSRF (Server-Side Request Forgery): aponte o webhook para o IP de metadados.',
+              'Digite http://169.254.169.254/latest/meta-data/ na Interface do Nó.',
+              'Metadados internos expostos: ' + flag
+            ];
+            method = 'SSRF para http://169.254.169.254/latest/meta-data/ -> ' + flag;
+            break;
+          }
+          case 'xor_single': {
+            surfaceTab = 'console';
+            var keyByte = 0x55;
+            var xored = xorHex(flag, keyByte);
+            briefing = 'A chave foi cifrada com XOR byte único (chave 0x55). Use o comando "xor 55 ' + xored + '" no Console!';
+            sourceCode = 'XOR_CIPHERTEXT (key=0x55): ' + xored;
+            hints = [
+              'Abra a aba "💻 Console / Decoder".',
+              'Cole: xor 55 ' + xored + ' e pressione Enter no campo de texto.',
+              'Chave decifrada: ' + flag
+            ];
+            method = 'Decifrar XOR com chave 0x55 sobre ' + xored + ' -> ' + flag;
+            break;
+          }
+          case 'proto_override': {
+            surfaceTab = 'web';
+            briefing = 'O parser JSON mescla objetos sem filtrar propriedades privilegiadas. Envie um JSON sobrescrevendo isAdmin!';
+            sourceCode = 'const session = Object.assign({ isAdmin: false }, JSON.parse(userInput));\nif (session.isAdmin === true) return "' + flag + '";';
+            hints = [
+              'Na Interface do Nó, envie um objeto JSON válido sobrescrevendo isAdmin.',
+              'Digite exatamente: {"isAdmin": true}',
+              'Escalação via JSON: ' + flag
+            ];
+            method = 'Sobrescrever propriedade com {"isAdmin": true} -> ' + flag;
+            break;
+          }
+          case 'mago_triad': {
+            surfaceTab = 'headers';
+            briefing = 'Desafio do Mago: alinhe Cookie loggedin=1, Cookie session_role=mago e Header X-Forwarded-For=127.0.0.1.';
+            sourceCode = 'if (cookies.loggedin === "1" && cookies.session_role === "mago" && headers["x-forwarded-for"] === "127.0.0.1") {\n  ascend("' + flag + '");\n}';
+            hints = [
+              'Abra "📡 Cookies & Headers" e configure os 3 parâmetros simultaneamente.',
+              'loggedin = 1, session_role = mago, X-Forwarded-For = 127.0.0.1 -> Reenviar Request.',
+              'Selo do Mago: ' + flag
+            ];
+            method = 'Alinhar loggedin=1, session_role=mago e XFF=127.0.0.1 -> ' + flag;
+            break;
+          }
+          case 'waf_bypass': {
+            surfaceTab = 'web';
+            var wafAddr = addr + '/%61dmin';
+            briefing = 'O firewall bloqueia "/admin", mas decodifica caracteres URL-encoded (%61 = a) antes de rotear!';
+            sourceCode = 'if (rawUrl.includes("/admin")) block();\nconst route = decodeURIComponent(rawUrl); // /%61dmin -> /admin';
+            simSpec.targetAddress = wafAddr;
+            hints = [
+              'Em hexadecimal ASCII, a letra "a" equivale a %61.',
+              'Navegue para ' + wafAddr + ' na barra de endereço superior.',
+              'Bypass de WAF concluído: ' + flag
+            ];
+            method = 'Bypass de WAF com /%61dmin na barra de endereço -> ' + flag;
+            break;
+          }
+          case 'seed_token': {
+            surfaceTab = 'web';
+            var token = 'SEED_' + word + '_' + padLocal;
+            briefing = 'O gerador de tokens usa uma fórmula previsível baseada no codinome e número do nó.';
+            sourceCode = '// Token formula: "SEED_" + NODE_CODENAME + "_" + NODE_NUM\n// NODE_CODENAME = "' + word + '", NODE_NUM = "' + padLocal + '"';
+            simSpec.expectedToken = token;
+            hints = [
+              'Monte o token seguindo a fórmula no Código-Fonte.',
+              'Envie ' + token + ' no formulário de verificação da Interface do Nó.',
+              'Chave mestra: ' + flag
+            ];
+            method = 'Gerar token previsível ' + token + ' -> ' + flag;
+            break;
+          }
+          case 'omega_core': {
+            surfaceTab = 'headers';
+            var b64Omega = toBase64(flag);
+            briefing = 'O Núcleo Ômega final exige Header Authorization / X-Debug = omega e decodificação Base64 do núcleo retornado.';
+            sourceCode = 'if (headers["x-debug"] === "omega") {\n  emitCore("' + b64Omega + '");\n}';
+            simSpec.coreB64 = b64Omega;
+            hints = [
+              'Primeiro defina Authorization / X-Debug = omega em "📡 Cookies & Headers" e reenvie.',
+              'Depois decodifique "' + b64Omega + '" em Base64 no Console / Decoder.',
+              'Chave Final do Protocolo Zero: ' + flag
+            ];
+            method = 'X-Debug: omega + Base64 Decode -> ' + flag;
+            break;
+          }
+        }
+
+        return {
+          globalId: globalId,
+          profile: profile,
+          localIndex: localIndex,
+          vector: arch.vec,
+          surfaceTab: surfaceTab,
+          title: arch.title + ' #' + padLocal,
+          address: addr,
+          briefing: briefing,
+          plainAnswer: flag,
+          hints: hints,
+          method: method,
+          sourceCode: sourceCode,
+          simSpec: simSpec
+        };
+      }
+
+      var NODES = (function () {
+        var all = [];
+        var gId = 1;
+        var PROFILES = ['Fácil', 'Médio', 'Difícil', 'Mago'];
+
+        var BY_PROFILE = {
+          'Fácil': [
+            { vec: 'Comentário HTML', title: 'Rastro no Markup', type: 'html_comment' },
+            { vec: 'CSS Oculto', title: 'Camada Invisível', type: 'css_hidden' },
+            { vec: 'Arquivo robots.txt', title: 'Diretório Proibido', type: 'robots_path' },
+            { vec: 'Base64 Exposto', title: 'Token Codificado', type: 'base64_source' },
+            { vec: 'Parâmetro GET', title: 'Filtro de Consulta', type: 'url_param' },
+            { vec: 'JS Client-Side', title: 'Validação Ingênua', type: 'js_client' },
+            { vec: 'ROT13 Clássico', title: 'Rotação de Letras', type: 'rot13_source' },
+            { vec: 'Backup Esquecido', title: 'Arquivo .bak Público', type: 'backup_file' },
+            { vec: 'Hexadecimal', title: 'Dump em Hex', type: 'hex_source' },
+            { vec: 'Atributo Data-*', title: 'Metadado no Botão', type: 'data_attr' }
+          ],
+          'Médio': [
+            { vec: 'Cookie Tampering', title: 'Sessão Forjada', type: 'cookie_loggedin' },
+            { vec: 'Spoofing de Referer', title: 'Origem Confiável', type: 'header_referer' },
+            { vec: 'User-Agent Restrito', title: 'Terminal Autorizado', type: 'header_ua' },
+            { vec: 'Cookie de Papel', title: 'Escalação para Admin', type: 'cookie_role' },
+            { vec: 'Directory Traversal', title: 'Travessia de Pasta', type: 'path_traversal' },
+            { vec: 'Header X-Debug', title: 'Modo Diagnóstico', type: 'header_debug' },
+            { vec: 'Bypass de Input', title: 'Limite de Formulário', type: 'form_bypass' },
+            { vec: 'Base64 + URL Encode', title: 'Dupla Camada', type: 'b64_url' },
+            { vec: 'API Interna', title: 'Endpoint de Auditoria', type: 'api_endpoint' },
+            { vec: 'IP Spoofing (XFF)', title: 'Acesso Localhost', type: 'header_xff' }
+          ],
+          'Difícil': [
+            { vec: 'SQL Injection (Auth)', title: 'Tautologia no Login', type: 'sqli_auth' },
+            { vec: 'Command Injection', title: 'Concatenação de Shell', type: 'cmd_inj' },
+            { vec: 'JWT alg:none', title: 'Assinatura Nula', type: 'jwt_none' },
+            { vec: 'SQLi UNION Select', title: 'Extração de Tabela', type: 'sqli_union' },
+            { vec: 'LFI Wrapper Base64', title: 'Leitura de Código', type: 'lfi_b64' },
+            { vec: 'XSS Refletido', title: 'Injeção de Script', type: 'xss_probe' },
+            { vec: 'IDOR Sequencial', title: 'Acesso Direto a Objeto', type: 'idor_uid' },
+            { vec: 'Cookie + Referer Chain', title: 'Dupla Verificação', type: 'chain_cookie_ref' },
+            { vec: 'Regex Bypass', title: 'Filtro Case-Sensitive', type: 'regex_bypass' },
+            { vec: 'Bypass Upload MIME', title: 'Extensão Dupla', type: 'mime_bypass' }
+          ],
+          'Mago': [
+            { vec: 'Blind SQLi Booleano', title: 'Oráculo Booleano', type: 'blind_sqli' },
+            { vec: 'Type Juggling (0e)', title: 'Colisão Mágica ==', type: 'type_juggling' },
+            { vec: 'SSRF Cloud Metadata', title: 'Túnel 169.254.169.254', type: 'ssrf_meta' },
+            { vec: 'Cifra XOR Byte Único', title: 'Chave Ortogonal', type: 'xor_single' },
+            { vec: 'Deserialização JSON', title: 'Override de Propriedade', type: 'proto_override' },
+            { vec: 'JWT + XFF + Cookie', title: 'Tríade de Infiltração', type: 'mago_triad' },
+            { type: 'extra_slot7' }, // antes repetia a fase "Extração de Tabela" do Difícil
+            { vec: 'Path Normalization', title: 'Bypass de WAF /admin', type: 'waf_bypass' },
+            { vec: 'Token Temporal', title: 'Semente Previsível', type: 'seed_token' },
+            { vec: 'Protocolo Ômega', title: 'Núcleo do Arquiteto', type: 'omega_core' }
+          ]
+        };
+
+        var CODE_WORDS = [
+          'ALPHA', 'NEXUS', 'CIPHER', 'VECTOR', 'SHADOW', 'PRISM', 'PULSE', 'VORTEX', 'SPECTER', 'COBALT',
+          'ZENITH', 'KRYPTON', 'ORBIT', 'MATRIX', 'PHANTOM', 'BEACON', 'QUARTZ', 'STRATOS', 'APEX', 'DRIFT',
+          'NOVA', 'SOLARIS', 'ECLIPSE', 'CHRONO', 'AEGIS', 'TITAN', 'HELIX', 'OMEGA', 'AETHER', 'GENESIS'
+        ];
+
+        PROFILES.forEach(function (profile, pIdx) {
+          var archetypes = BY_PROFILE[profile];
+          for (var i = 1; i <= 30; i++) {
+            var padLocal = String(i).padStart(2, '0');
+            var prefix = ['EASY', 'MED', 'HARD', 'MAGO'][pIdx];
+            var word = CODE_WORDS[(i + pIdx * 5) % CODE_WORDS.length];
+            // Sufixo derivado de hash: a chave não pode ser adivinhada por uma fórmula simples.
+            var suffix = CryptoVault.sha256('VB_FLAG|' + gId + '|' + word).slice(0, 6).toUpperCase();
+            var flag = 'VB{' + prefix + '_' + word + '_' + suffix + '}';
+            var addr = 'sector-0' + (pIdx + 1) + '.void/gate-' + padLocal;
+
+            // Nós 1–10: as 10 fases clássicas do nível (uma de cada tipo).
+            // Nós 11–30: fases extras, todas com mecânica diferente (fases.js).
+            var arch = i <= 10 ? archetypes[i - 1] : null;
+            var built;
+            if (arch && arch.type !== 'extra_slot7') {
+              built = buildNodeScenario({
+                globalId: gId,
+                profile: profile,
+                localIndex: i,
+                arch: arch,
+                flag: flag,
+                addr: addr,
+                word: word,
+                padLocal: padLocal
+              });
+            } else {
+              var extra = window.VB_FASES.buildExtra(profile, arch ? 'slot7' : i - 11, {
+                F: flag, A: addr, W: word, w: word.toLowerCase(), N: padLocal, i: i, gid: gId
+              });
+              extra.title = extra.title + ' #' + padLocal;
+              built = Object.assign({ globalId: gId, profile: profile, localIndex: i, address: addr, plainAnswer: flag }, extra);
+            }
+            gId++;
+            all.push(registerNode(built));
+          }
+        });
+
+        return all;
+      })();
+      /* === GAME_CORE_END === */
+
+      // 7. PERSISTENT STATE
+      var STORAGE_KEY = 'voidbreach_proto_zero_v3';
+
+      var state = {
+        profile: {
+          created: false,
+          name: 'Ghost_01',
+          avatarType: 'icon',
+          avatarValue: '👾'
+        },
+        coins: 120,
+        theme: 'matrix',
+        currentGlobalId: 1,
+        solvedNodes: {},
+        unlockedHints: {},
+        purchasedItems: [],
+        equippedFrame: '',
+        notes: {},
+        muted: false,
+        seenHelp: false
+      };
+
+      var tamperDetected = false;
+
+      function economySig() {
+        return CryptoVault.sign({ c: state.coins, p: state.purchasedItems, h: state.unlockedHints, s: state.solvedNodes, f: state.equippedFrame });
+      }
+
+      function loadState() {
+        var parsed = null;
+        try { parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) {}
+
+        if (!parsed || typeof parsed !== 'object') {
+          // Save da versão anterior: aproveita só perfil, tema e som.
+          // As chaves das fases mudaram, então o progresso antigo não vale mais.
+          try {
+            var old = JSON.parse(localStorage.getItem('voidbreach_proto_zero_v2') || 'null');
+            if (old && old.profile && typeof old.profile === 'object') {
+              state.profile = old.profile;
+              state.seenHelp = !!old.profile.created;
+            }
+            if (old && old.theme) state.theme = old.theme;
+          } catch (e) {}
+          return;
+        }
+
+        state = Object.assign({}, state, parsed);
+        if (!state.solvedNodes || typeof state.solvedNodes !== 'object') state.solvedNodes = {};
+        if (!state.unlockedHints || typeof state.unlockedHints !== 'object') state.unlockedHints = {};
+        if (!Array.isArray(state.purchasedItems)) state.purchasedItems = [];
+        if (!state.notes || typeof state.notes !== 'object') state.notes = {};
+        if (!state.profile || typeof state.profile !== 'object') state.profile = { created: false, name: 'Ghost_01', avatarType: 'icon', avatarValue: '👾' };
+
+        // 1) Moedas/compras/dicas assinadas: editar o save à mão zera a economia.
+        if (parsed.sig !== economySig()) {
+          tamperDetected = true;
+          state.coins = 0;
+          state.purchasedItems = [];
+          state.unlockedHints = {};
+          state.equippedFrame = '';
+        }
+        state.coins = Math.max(0, Math.floor(Number(state.coins) || 0));
+
+        // 2) Progresso: só valem provas corretas e em sequência a partir do nó 1.
+        var clean = {};
+        for (var id = 1; id <= NODES.length; id++) {
+          if (state.solvedNodes[id] && state.solvedNodes[id] === CryptoVault.proofFor(id, ANSWERS[id])) clean[id] = state.solvedNodes[id];
+          else break;
+        }
+        if (Object.keys(state.solvedNodes).length !== Object.keys(clean).length) tamperDetected = true;
+        state.solvedNodes = clean;
+
+        // 3) Nó atual nunca pode passar do primeiro nó não resolvido.
+        state.currentGlobalId = Math.floor(Number(state.currentGlobalId) || 1);
+        if (!isUnlocked(state.currentGlobalId)) state.currentGlobalId = frontierId();
+
+        if (tamperDetected) saveState();
+      }
+
+      // Primeiro nó ainda não resolvido (a "fronteira"). Tudo até ele está liberado.
+      function frontierId() {
+        for (var id = 1; id <= NODES.length; id++) {
+          if (!state.solvedNodes[id]) return id;
+        }
+        return NODES.length;
+      }
+
+      function isUnlocked(id) {
+        return id >= 1 && id <= NODES.length && id <= frontierId();
+      }
+
+      function solvedInProfile(profile) {
+        return NODES.filter(function (n) { return n.profile === profile && state.solvedNodes[n.globalId]; }).length;
+      }
+
+      function saveState() {
+        try {
+          state.sig = economySig();
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+      }
+
+      function goToNode(id) {
+        if (!isUnlocked(id)) {
+          AudioEngine.error();
+          spawnSticker('🔒 Resolva o nó atual para liberar o próximo', window.innerWidth / 2, window.innerHeight * 0.3);
+          return false;
+        }
+        state.currentGlobalId = id;
+        saveState();
+        renderCurrentNode();
+        return true;
+      }
+
+      function hasUpgrade(id) {
+        return state.purchasedItems.indexOf(id) !== -1;
+      }
+
+      function getCurrentNode() {
+        return NODES.find(function (n) { return n.globalId === state.currentGlobalId; }) || NODES[0];
+      }
+
+      // 8. SANDBOX TABS & TARGET EVALUATION
+      var currentSandboxTab = 'web';
+      var TAB_LABELS = {
+        web: '🌐 Interface do Nó',
+        source: '</> Código-Fonte',
+        headers: '📡 Cookies & Headers',
+        console: '💻 Console / Decoder'
+      };
+
+      function switchSandboxTab(tabName) {
+        currentSandboxTab = tabName;
+        var node = getCurrentNode();
+        var scannerOn = hasUpgrade('vuln_scanner');
+
+        ['web', 'source', 'headers', 'console'].forEach(function (t) {
+          var viewId = 'tabView' + t.charAt(0).toUpperCase() + t.slice(1);
+          var view = document.getElementById(viewId);
+          if (view) view.classList.toggle('hidden', t !== tabName);
+        });
+
+        document.querySelectorAll('.sandbox-tab-btn').forEach(function (btn) {
+          var t = btn.getAttribute('data-sandbox-tab');
+          var isSel = t === tabName;
+          var isHot = scannerOn && node.surfaceTab === t && !isSel;
+          btn.className = 'sandbox-tab-btn btn-tactile py-2 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 border transition ' +
+            (isSel
+              ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200'
+              : isHot
+                ? 'bg-amber-500/15 border-amber-400/60 text-amber-200'
+                : 'bg-white/5 border-white/10 opacity-75 hover:opacity-100');
+        });
+      }
+
+      document.querySelectorAll('.sandbox-tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          switchSandboxTab(btn.getAttribute('data-sandbox-tab'));
+          AudioEngine.click();
+        });
+      });
+
+      // Aceita "node://", espaços e barra final que o jogador digitar por engano.
+      function normalizeAddress(raw) {
+        return (raw || '').trim().replace(/^node:\/\//i, '').replace(/^\/+/, '').replace(/\/+$/, '');
+      }
+
+      var serverKey = null;
+
+      function hideServerOutput() {
+        var outEl = document.getElementById('simServerOutput');
+        outEl.classList.add('hidden');
+        outEl.textContent = '';
+        serverKey = null;
+        document.getElementById('btnUseServerKey').classList.add('hidden');
+      }
+
+      function showServerOutput(text, key, isError) {
+        var outEl = document.getElementById('simServerOutput');
+        outEl.textContent = text;
+        outEl.classList.remove('hidden', 'border-emerald-400/40', 'text-emerald-300', 'border-rose-400/40', 'text-rose-300');
+        outEl.classList.add(isError ? 'border-rose-400/40' : 'border-emerald-400/40', isError ? 'text-rose-300' : 'text-emerald-300');
+        // Se a resposta trouxer uma chave VB{...}, oferece o botão "Usar esta chave".
+        var found = !isError && text.match(/VB\{[^}\s]+\}/);
+        serverKey = key || (found ? found[0] : null);
+        document.getElementById('btnUseServerKey').classList.toggle('hidden', !serverKey);
+      }
+
+      // Fases de fases.js: rotas, regras de cabeçalho e texto invisível, tudo declarativo.
+      function evaluateGeneric(node, spec, addrVal, h, bodyEl) {
+        var canon = window.VB_FASES.canonAddress(addrVal);
+        if (addrVal && canon !== window.VB_FASES.canonAddress(node.address)) {
+          var routed = spec.routes && spec.routes[canon];
+          if (routed) showServerOutput('[200 OK] node://' + addrVal + '\n' + routed);
+          else showServerOutput('[404 NOT FOUND] node://' + addrVal + ' não existe neste servidor.\nConfira o endereço (a base deste nó é ' + node.address + ').', null, true);
+        }
+        if (spec.headerRule) {
+          var reply = spec.headerRule(h);
+          if (reply) showServerOutput(reply);
+        }
+
+        bodyEl.removeAttribute('data-node');
+        bodyEl.innerHTML = '';
+        var box = document.createElement('div');
+        box.className = 'p-3.5 rounded-xl bg-black/50 border border-white/10 space-y-2';
+        var top = document.createElement('div');
+        top.className = 'font-code text-xs font-bold text-emerald-300';
+        top.textContent = 'Serviço Ativo: ' + node.address;
+        var desc = document.createElement('p');
+        desc.className = 'text-xs opacity-85 leading-relaxed';
+        desc.textContent = spec.stealthText
+          ? 'Página carregada. Nada de estranho... ou será que tem algo aqui que você não está vendo?'
+          : 'A chave não aparece nesta tela. Leia a missão 🎯 acima e investigue as outras abas ou a barra de endereço node:// lá no topo.';
+        box.appendChild(top);
+        box.appendChild(desc);
+        if (spec.stealthText) {
+          var lbl = document.createElement('div');
+          lbl.className = 'text-[11px] font-bold opacity-70 mt-2';
+          lbl.textContent = 'Mensagem do sistema:';
+          var hidden = document.createElement('p');
+          hidden.className = 'stealth-text font-code text-sm select-text';
+          hidden.textContent = spec.stealthText;
+          box.appendChild(lbl);
+          box.appendChild(hidden);
+        }
+        bodyEl.appendChild(box);
+      }
+
+      function fillAnswer(key) {
+        var inputEl = document.getElementById('answerInput');
+        inputEl.value = key;
+        var box = document.getElementById('answerCardBox');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        box.classList.remove('pulse-glow');
+        void box.offsetWidth;
+        box.classList.add('pulse-glow');
+        setTimeout(function () { inputEl.focus({ preventScroll: true }); }, 350);
+        AudioEngine.click();
+      }
+
+      function evaluateTargetState() {
+        var node = getCurrentNode();
+        var spec = node.simSpec;
+        var addrVal = normalizeAddress(document.getElementById('virtualAddressInput').value);
+        var loggedin = document.getElementById('hdrCookieLoggedIn').value.trim();
+        var role = document.getElementById('hdrCookieRole').value.trim().toLowerCase();
+        var referer = document.getElementById('hdrReferer').value.trim();
+        var ua = document.getElementById('hdrUserAgent').value.trim();
+        var xff = document.getElementById('hdrXff').value.trim();
+        var auth = document.getElementById('hdrAuth').value.trim();
+
+        document.getElementById('simSessionPill').textContent = 'loggedin=' + loggedin + ' • session_role=' + role;
+        var bodyEl = document.getElementById('simWebBody');
+
+        hideServerOutput();
+
+        if (spec.type === 'generic') {
+          evaluateGeneric(node, spec, addrVal, { loggedin: loggedin, role: role, referer: referer, ua: ua, xff: xff, auth: auth }, bodyEl);
+          return;
+        }
+
+        var refererN = referer.replace(/\/+$/, '').toLowerCase();
+        var addrMatchesTarget = spec.targetAddress && addrVal.toLowerCase() === spec.targetAddress.toLowerCase();
+
+        if (addrMatchesTarget) {
+          showServerOutput('[200 OK] Recurso interno localizado em ' + addrVal + ':\nCHAVE EXTRAÍDA: ' + spec.flag, spec.flag);
+        } else if (addrVal && addrVal.toLowerCase() !== node.address.toLowerCase()) {
+          showServerOutput('[404 NOT FOUND] node://' + addrVal + ' não existe neste servidor.\nConfira o endereço (a base deste nó é ' + node.address + ').', null, true);
+        }
+
+        if (spec.type === 'cookie_loggedin' && loggedin === '1') {
+          showServerOutput('[200 OK] Sessão autenticada via Cookie loggedin=1!\nCHAVE: ' + spec.flag, spec.flag);
+        } else if (spec.type === 'header_referer' && refererN === 'https://intranet.void') {
+          showServerOutput('[200 OK] Origem interna validada (' + referer + ')!\nCHAVE: ' + spec.flag, spec.flag);
+        } else if (spec.type === 'header_ua' && ua.toLowerCase() === 'voidadmincli/9.0') {
+          showServerOutput('[200 OK] Cliente administrativo reconhecido!\nCHAVE: ' + spec.flag, spec.flag);
+        } else if (spec.type === 'cookie_role' && (role === 'admin' || role === 'root')) {
+          showServerOutput('[200 OK] Privilégio elevado para session_role=' + role + '!\nCHAVE: ' + spec.flag, spec.flag);
+        } else if (spec.type === 'header_debug' && auth.toLowerCase() === 'true') {
+          showServerOutput('[200 OK] DUMP DE VARIÁVEIS DE AMBIENTE:\nMASTER_KEY = ' + spec.flag, spec.flag);
+        } else if (spec.type === 'header_xff' && xff === '127.0.0.1') {
+          showServerOutput('[200 OK] Conexão local (127.0.0.1) autorizada!\nCHAVE: ' + spec.flag, spec.flag);
+        } else if (spec.type === 'chain_cookie_ref' && role === 'admin' && refererN === 'https://core.void') {
+          showServerOutput('[200 OK] Dupla verificação aprovada!\nCHAVE: ' + spec.flag, spec.flag);
+        } else if (spec.type === 'mago_triad' && loggedin === '1' && role === 'mago' && xff === '127.0.0.1') {
+          showServerOutput('[200 OK] TRÍADE DO MAGO ALINHADA!\nCHAVE: ' + spec.flag, spec.flag);
+        } else if (spec.type === 'omega_core' && auth.toLowerCase() === 'omega') {
+          showServerOutput('[200 OK] NÚCLEO ÔMEGA EMITIDO (Base64):\n' + spec.coreB64 + '\n\n(Decodifique em Base64 na aba 💻 Console / Decoder)', null);
+        }
+
+        var interactiveTypes = [
+          'path_traversal', 'form_bypass', 'sqli_auth', 'cmd_inj', 'jwt_none',
+          'sqli_union', 'lfi_b64', 'xss_probe', 'regex_bypass', 'mime_bypass',
+          'blind_sqli', 'type_juggling', 'ssrf_meta', 'proto_override', 'seed_token'
+        ];
+
+        if (interactiveTypes.indexOf(spec.type) !== -1) {
+          var placeholders = {
+            path_traversal: 'Ex: ../../secret.key',
+            form_bypass: 'Digite um PIN numérico...',
+            sqli_auth: "Usuário ou payload SQL (ex: ' OR '1'='1)",
+            cmd_inj: 'IP de destino (ex: 127.0.0.1; cat key.txt)',
+            jwt_none: 'Cole token JWT ou {"admin":true}',
+            sqli_union: "Termo de busca ou ' UNION SELECT ...",
+            lfi_b64: 'Ex: php://filter/convert.base64-encode/resource=config.php',
+            xss_probe: 'Mensagem HTML (ex: <img src=x onerror=alert(1)>)',
+            regex_bypass: 'Digite o papel administrativo...',
+            mime_bypass: 'Nome do arquivo (ex: shell.php.png)',
+            blind_sqli: 'Condição booleana (ex: 1=1)',
+            type_juggling: 'Hash mágico iniciado em 0e...',
+            ssrf_meta: 'URL interna (ex: http://169.254.169.254/latest/meta-data/)',
+            proto_override: 'Payload JSON (ex: {"isAdmin": true})',
+            seed_token: 'Token gerado pela fórmula...'
+          };
+
+          // Não recria o formulário (e não apaga o que o jogador digitou) se ele já é deste nó.
+          if (bodyEl.getAttribute('data-node') === String(node.globalId)) return;
+          bodyEl.setAttribute('data-node', String(node.globalId));
+
+          bodyEl.innerHTML = '';
+          var box = document.createElement('div');
+          box.className = 'p-3 rounded-xl bg-black/50 border border-white/10 space-y-2.5';
+
+          var heading = document.createElement('div');
+          heading.className = 'font-code text-xs text-sky-300 font-bold';
+          heading.textContent = 'Endpoint Interativo — ' + node.title;
+          box.appendChild(heading);
+
+          var sub = document.createElement('p');
+          sub.className = 'text-[11px] opacity-70';
+          sub.textContent = 'Digite sua entrada (payload) e clique em EXECUTAR — ou aperte Enter.';
+          box.appendChild(sub);
+
+          var row = document.createElement('div');
+          row.className = 'flex gap-2';
+
+          var inp = document.createElement('input');
+          inp.type = 'text';
+          inp.setAttribute('aria-label', 'Entrada do endpoint');
+          inp.setAttribute('autocomplete', 'off');
+          inp.setAttribute('autocapitalize', 'off');
+          inp.setAttribute('spellcheck', 'false');
+          inp.placeholder = placeholders[spec.type] || 'Enviar parâmetro...';
+          inp.className = 'flex-1 min-w-0 px-3 py-2 rounded-lg bg-slate-900 border border-white/20 font-code text-xs text-white focus:border-emerald-400 focus:outline-none';
+
+          var execBtn = document.createElement('button');
+          execBtn.type = 'button';
+          execBtn.className = 'btn-tactile px-3.5 py-2 rounded-lg bg-sky-500/25 hover:bg-sky-500/40 border border-sky-400/40 text-sky-200 font-code text-xs font-bold shrink-0';
+          execBtn.textContent = 'EXECUTAR';
+
+          row.appendChild(inp);
+          row.appendChild(execBtn);
+          box.appendChild(row);
+          bodyEl.appendChild(box);
+
+          inp.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); execBtn.click(); }
+          });
+
+          execBtn.addEventListener('click', function () {
+            var val = inp.value.trim();
+            var success = false;
+            var customMsg = '';
+
+            if (spec.type === 'path_traversal' && val.indexOf('../') !== -1 && val.indexOf('secret.key') !== -1) success = true;
+            if (spec.type === 'form_bypass' && Number(val) > 9000) success = true;
+            if (spec.type === 'sqli_auth' && /'\s*or\s*['"]?1['"]?\s*=\s*['"]?1/i.test(val)) success = true;
+            if (spec.type === 'cmd_inj' && (val.indexOf(';') !== -1 || val.indexOf('&&') !== -1 || val.indexOf('|') !== -1)) success = true;
+            if (spec.type === 'jwt_none' && val.toLowerCase().indexOf('admin') !== -1 && val.toLowerCase().indexOf('true') !== -1) success = true;
+            if (spec.type === 'sqli_union' && /union\s+select/i.test(val) && /vault/i.test(val)) success = true;
+            if (spec.type === 'lfi_b64' && val.indexOf('php://filter') !== -1 && val.indexOf('base64') !== -1 && val.indexOf('config.php') !== -1) {
+              customMsg = '[BASE64 STREAM]:\n' + spec.b64Leak + '\n\n(Decodifique na aba Console / Decoder!)';
+            }
+            if (spec.type === 'xss_probe' && (/<script/i.test(val) || /onerror\s*=/i.test(val))) success = true;
+            if (spec.type === 'regex_bypass' && val !== 'admin' && val.toLowerCase() === 'admin') success = true;
+            if (spec.type === 'mime_bypass' && val.toLowerCase().indexOf('.php') !== -1 && val.toLowerCase().endsWith('.png')) success = true;
+            if (spec.type === 'blind_sqli' && (/1\s*=\s*1/.test(val) || /true/i.test(val))) success = true;
+            if (spec.type === 'type_juggling' && (/^0e\d+$/i.test(val) || val === '240610708')) success = true;
+            if (spec.type === 'ssrf_meta' && val.indexOf('169.254.169.254') !== -1) success = true;
+            if (spec.type === 'proto_override' && val.indexOf('isAdmin') !== -1 && val.indexOf('true') !== -1) success = true;
+            if (spec.type === 'seed_token' && val === spec.expectedToken) success = true;
+
+            if (customMsg) {
+              showServerOutput(customMsg, null);
+              AudioEngine.hint();
+            } else if (success) {
+              showServerOutput('[200 OK] Exploit executado com sucesso!\nCHAVE EXTRAÍDA: ' + spec.flag, spec.flag);
+              AudioEngine.hint();
+            } else {
+              showServerOutput('[403 DENIED] Resposta padrão do servidor: entrada "' + (val || '(vazia)') + '" rejeitada.\nReleia a missão e o Código-Fonte para descobrir o que o servidor espera.', null, true);
+              AudioEngine.error();
+            }
+          });
+        } else {
+          bodyEl.removeAttribute('data-node');
+          bodyEl.innerHTML = '';
+          var infoBox = document.createElement('div');
+          infoBox.className = 'p-3.5 rounded-xl bg-black/50 border border-white/10 space-y-2';
+
+          var topRow = document.createElement('div');
+          topRow.className = 'flex items-center justify-between gap-2';
+
+          var svcSpan = document.createElement('span');
+          svcSpan.className = 'font-code text-xs font-bold text-emerald-300';
+          svcSpan.textContent = 'Serviço Ativo: ' + node.address;
+
+          var stSpan = document.createElement('span');
+          stSpan.className = 'font-code text-[10px] px-2 py-0.5 rounded bg-white/10';
+          stSpan.textContent = 'STATUS: MONITORADO';
+
+          topRow.appendChild(svcSpan);
+          topRow.appendChild(stSpan);
+
+          var descP = document.createElement('p');
+          descP.className = 'text-xs opacity-85 leading-relaxed';
+          descP.textContent = 'A chave não aparece nesta tela. Leia a missão 🎯 acima e investigue as abas Código-Fonte, Cookies & Headers, Console / Decoder ou a barra de endereço node:// lá no topo.';
+
+          infoBox.appendChild(topRow);
+          infoBox.appendChild(descP);
+          bodyEl.appendChild(infoBox);
+        }
+      }
+
+      function renderCurrentNode() {
+        var node = getCurrentNode();
+        var isSolved = !!state.solvedNodes[node.globalId];
+
+        document.getElementById('virtualAddressInput').value = node.address;
+        document.getElementById('sourceUrlLabel').textContent = node.address;
+        document.getElementById('nodeCodeTag').textContent = 'NODE #' + String(node.localIndex).padStart(2, '0');
+        document.getElementById('nodeVectorTag').textContent = 'Vetor: ' + node.vector;
+        document.getElementById('nodeTitle').textContent = node.title;
+        document.getElementById('nodeBriefing').textContent = node.briefing;
+        document.getElementById('simSourceCode').textContent = node.sourceCode;
+        document.getElementById('targetHashPreview').textContent = node.answerHash.slice(0, 18) + '...' + node.answerHash.slice(-8);
+
+        document.getElementById('hdrCookieLoggedIn').value = node.defaultHeaders.loggedin;
+        document.getElementById('hdrCookieRole').value = node.defaultHeaders.role;
+        document.getElementById('hdrReferer').value = node.defaultHeaders.referer;
+        document.getElementById('hdrUserAgent').value = node.defaultHeaders.userAgent;
+        document.getElementById('hdrXff').value = node.defaultHeaders.xff;
+        document.getElementById('hdrAuth').value = node.defaultHeaders.auth;
+
+        // Dica de onde começar: grátis no nível Fácil, ou com o Scanner de Vetor comprado.
+        var tipEl = document.getElementById('nodeTabTip');
+        if (node.profile === 'Fácil' || hasUpgrade('vuln_scanner')) {
+          tipEl.textContent = '👉 Comece pela aba ' + TAB_LABELS[node.surfaceTab] + (node.surfaceTab === 'web' ? ' (e a barra de endereço node:// lá em cima).' : '.');
+          tipEl.classList.remove('hidden');
+        } else {
+          tipEl.textContent = '';
+          tipEl.classList.add('hidden');
+        }
+
+        document.getElementById('simWebBody').removeAttribute('data-node');
+        document.getElementById('decoderOutput').textContent = '[Aguardando entrada para decodificação...]';
+        document.getElementById('btnUseDecoderKey').classList.add('hidden');
+
+        switchSandboxTab('web');
+        evaluateTargetState();
+
+        var inputEl = document.getElementById('answerInput');
+        var solvedPill = document.getElementById('solvedBadgePill');
+        var feedbackEl = document.getElementById('feedbackMsg');
+        feedbackEl.classList.add('hidden');
+
+        inputEl.value = '';
+        inputEl.placeholder = isSolved ? '✓ Nó já resolvido' : 'VB{...}';
+        solvedPill.classList.toggle('hidden', !isSolved);
+
+        document.getElementById('scratchpadInput').value = state.notes[node.globalId] || '';
+
+        renderHintsPanel();
+        updateHeaderUI();
+        updateNavButtons();
+      }
+
+      // ▶ só libera quando o nó atual está resolvido; ◀ sempre volta para nós já liberados.
+      function updateNavButtons() {
+        var id = state.currentGlobalId;
+        var next = document.getElementById('btnNextNodeNav');
+        var prev = document.getElementById('btnPrevNode');
+        var canNext = id < NODES.length && isUnlocked(id + 1);
+        next.disabled = !canNext;
+        next.title = canNext ? 'Próximo nó' : (id >= NODES.length ? 'Último nó' : 'Resolva este nó para liberar o próximo');
+        prev.disabled = id <= 1;
+      }
+
+      // 9. HINTS & SHA-256 VALIDATION
+      function getHintCost(tierIdx) {
+        var base = [10, 25, 50][tierIdx];
+        return hasUpgrade('hint_discount') ? Math.max(5, Math.round(base * 0.8)) : base;
+      }
+
+      function renderHintsPanel() {
+        var node = getCurrentNode();
+        var unlocked = state.unlockedHints[node.globalId] || [];
+
+        document.getElementById('discountTag').classList.toggle('hidden', !hasUpgrade('hint_discount'));
+
+        [0, 1, 2].forEach(function (idx) {
+          var btn = document.getElementById('btnHint' + (idx + 1));
+          var costEl = document.getElementById('costHint' + (idx + 1));
+          var isOpen = unlocked.indexOf(idx) !== -1;
+          costEl.textContent = isOpen ? '✓ Aberta' : getHintCost(idx) + ' 🪙';
+          btn.disabled = isOpen;
+        });
+
+        var feed = document.getElementById('hintsFeed');
+        if (unlocked.length === 0) {
+          feed.innerHTML = '<div class="p-2.5 rounded-xl bg-white/5 border border-white/10 opacity-65 italic">Nenhuma inteligência solicitada para este nó ainda.</div>';
+          return;
+        }
+
+        feed.innerHTML = '';
+        unlocked.slice().sort(function (a, b) { return a - b; }).forEach(function (idx) {
+          var item = document.createElement('div');
+          item.className = 'p-2.5 rounded-xl bg-amber-500/15 border border-amber-400/35 text-amber-100';
+          var lbl = document.createElement('span');
+          lbl.className = 'font-code font-bold text-[10px] uppercase text-amber-300';
+          lbl.textContent = 'Camada ' + (idx + 1) + ':';
+          var p = document.createElement('p');
+          p.className = 'mt-0.5 leading-snug';
+          p.textContent = node.hints[idx];
+          item.appendChild(lbl);
+          item.appendChild(p);
+          feed.appendChild(item);
+        });
+      }
+
+      function unlockHint(tierIdx) {
+        var node = getCurrentNode();
+        if (!state.unlockedHints[node.globalId]) state.unlockedHints[node.globalId] = [];
+        if (state.unlockedHints[node.globalId].indexOf(tierIdx) !== -1) return;
+
+        var cost = getHintCost(tierIdx);
+        if (state.coins < cost) {
+          AudioEngine.error();
+          showFeedback('Moedas insuficientes! Comprometa nós anteriores para acumular 🪙.', 'error');
+          return;
+        }
+
+        state.coins -= cost;
+        state.unlockedHints[node.globalId].push(tierIdx);
+        saveState();
+        AudioEngine.hint();
+        updateHeaderUI();
+        renderHintsPanel();
+      }
+
+      function showFeedback(text, type) {
+        var el = document.getElementById('feedbackMsg');
+        el.textContent = text;
+        el.classList.remove('hidden', 'bg-rose-500/20', 'text-rose-200', 'border', 'border-rose-400/40', 'bg-emerald-500/20', 'text-emerald-200', 'border-emerald-400/40');
+        if (type === 'error') {
+          el.classList.add('bg-rose-500/20', 'text-rose-200', 'border', 'border-rose-400/40');
+          var box = document.getElementById('answerCardBox');
+          box.classList.remove('shake-box');
+          void box.offsetWidth;
+          box.classList.add('shake-box');
+        } else {
+          el.classList.add('bg-emerald-500/20', 'text-emerald-200', 'border', 'border-emerald-400/40');
+        }
+      }
+
+      function validateSubmittedKey(rawVal) {
+        var node = getCurrentNode();
+        var clean = CryptoVault.normalizeKey(rawVal);
+
+        if (!clean) {
+          AudioEngine.error();
+          showFeedback('Insira a chave de acesso extraída antes de autenticar.', 'error');
+          return;
+        }
+
+        if (validating) return;
+        validating = true;
+        var submitBtn = document.getElementById('btnSubmitAnswer');
+        submitBtn.disabled = true;
+
+        CryptoVault.computeSaltedHash(node.globalId, clean).then(function (candidateHash) {
+          validating = false;
+          submitBtn.disabled = false;
+          // O jogador pode ter trocado de nó enquanto o hash era calculado.
+          if (getCurrentNode().globalId !== node.globalId) return;
+
+          if (candidateHash === node.answerHash) {
+            AudioEngine.solved();
+            var already = !!state.solvedNodes[node.globalId];
+            if (already) {
+              // Antes dava +5 a cada reenvio: dava para farmar moedas infinitas repetindo a mesma chave.
+              showFeedback('✓ Chave correta! Este nó já estava resolvido (sem moedas extras).', 'success');
+              return;
+            }
+            var baseMap = { 'Fácil': 25, 'Médio': 40, 'Difícil': 60, 'Mago': 90 };
+            var baseReward = baseMap[node.profile] || 30;
+            var mult = hasUpgrade('double_coins') ? 2 : 1;
+            var earned = baseReward * mult;
+
+            state.coins += earned;
+            // Guarda uma prova derivada da chave (não um simples "true"), conferida ao carregar o save.
+            state.solvedNodes[node.globalId] = CryptoVault.proofFor(node.globalId, clean);
+            saveState();
+            updateHeaderUI();
+            updateNavButtons();
+
+            spawnSticker('🔓 Nó #' + String(node.localIndex).padStart(2, '0') + ' (' + node.profile + ') Comprometido!', window.innerWidth / 2, window.innerHeight * 0.34);
+
+            document.getElementById('solvedModalTitle').textContent = node.profile + ' — Nó #' + String(node.localIndex).padStart(2, '0');
+            solvedRenderUI(node);
+            var nextId = node.globalId < NODES.length ? node.globalId + 1 : null;
+            document.getElementById('solvedModalExplanation').textContent = nextId
+              ? 'Assinatura SHA-256 autenticada (' + node.answerHash.slice(0, 14) + '...). Progresso: ' + Object.keys(state.solvedNodes).length + '/120 nós.'
+              : '🏆 Você comprometeu TODOS os 120 nós! Protocolo Zero concluído.';
+            document.getElementById('btnProceedNextNode').textContent = nextId ? 'Avançar para Próximo Nó ➔' : 'Ver mapa da rede 🏆';
+            document.getElementById('solvedRewardCoins').textContent = '+' + earned + ' 🪙';
+            openModal('solvedModal');
+          } else {
+            AudioEngine.error();
+            var looksLikeKey = /^VB\{.+\}$/.test(clean);
+            showFeedback(looksLikeKey
+              ? '✗ Chave incorreta para este nó. Confira se copiou a chave inteira, incluindo VB{ e }.'
+              : '✗ Formato inválido. A chave sempre tem o formato VB{...} — ex: VB{EASY_NOME_A1B2C3}.', 'error');
+          }
+        }).catch(function () {
+          validating = false;
+          submitBtn.disabled = false;
+        });
+      }
+
+      var validating = false;
+
+      function solvedRenderUI(node) {
+        document.getElementById('solvedBadgePill').classList.remove('hidden');
+        document.getElementById('answerInput').placeholder = '✓ Nó já resolvido';
+        showFeedback('✓ Nó comprometido com sucesso!', 'success');
+      }
+
+      // 10. DECODER HANDLERS (mesmas funções que o teste automático usa: fases.js)
+      var decoderResult = null;
+      var decoderKey = null;
+
+      function runDecoder(op) {
+        var raw = document.getElementById('decoderInput').value;
+        var param = document.getElementById('decoderParam').value;
+        var out = document.getElementById('decoderOutput');
+        try {
+          decoderResult = window.VB_FASES.decodeOp(op, raw, param);
+          out.textContent = decoderResult;
+          var found = decoderResult.match(/VB\{[^}\s]+\}/);
+          decoderKey = found ? found[0] : null;
+          document.getElementById('btnUseDecoderKey').classList.toggle('hidden', !decoderKey);
+          if (decoderKey) AudioEngine.hint(); else AudioEngine.click();
+        } catch (err) {
+          decoderResult = null;
+          decoderKey = null;
+          document.getElementById('btnUseDecoderKey').classList.add('hidden');
+          out.textContent = '[Não deu para decodificar: ' + err.message + ']';
+          AudioEngine.error();
+        }
+      }
+
+      document.querySelectorAll('.decoder-op-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () { runDecoder(btn.getAttribute('data-decode-op')); });
+      });
+
+      document.getElementById('decoderInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey && /^xor\s+/i.test(e.target.value.trim())) {
+          e.preventDefault();
+          runDecoder('xor');
+        }
+      });
+
+      document.getElementById('btnDecoderChain').addEventListener('click', function () {
+        if (decoderResult == null) return;
+        document.getElementById('decoderInput').value = decoderResult;
+        document.getElementById('decoderOutput').textContent = '[Resultado movido para a entrada. Escolha a próxima operação.]';
+        decoderResult = null;
+        AudioEngine.click();
+      });
+
+      document.getElementById('btnUseDecoderKey').addEventListener('click', function () {
+        if (decoderKey) fillAnswer(decoderKey);
+      });
+      document.getElementById('btnUseServerKey').addEventListener('click', function () {
+        if (serverKey) fillAnswer(serverKey);
+      });
+
+      document.getElementById('btnClearDecoder').addEventListener('click', function () {
+        document.getElementById('decoderInput').value = '';
+        document.getElementById('decoderParam').value = '';
+        document.getElementById('decoderOutput').textContent = '[Aguardando entrada para decodificação...]';
+        document.getElementById('btnUseDecoderKey').classList.add('hidden');
+        decoderResult = null;
+        decoderKey = null;
+      });
+
+      // Código-Fonte: copiar e enviar ao Decoder (trecho selecionado ou o código todo).
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        ta.remove();
+        return Promise.resolve();
+      }
+
+      document.getElementById('btnCopySource').addEventListener('click', function (e) {
+        var pre = document.getElementById('simSourceCode');
+        var btn = e.currentTarget;
+        copyText(pre.textContent).then(function () {
+          btn.textContent = '✓ Copiado';
+          setTimeout(function () { btn.textContent = '📋 Copiar'; }, 1400);
+        });
+        AudioEngine.click();
+      });
+
+      document.getElementById('btnSourceToDecoder').addEventListener('click', function () {
+        var pre = document.getElementById('simSourceCode');
+        var sel = window.getSelection ? String(window.getSelection()) : '';
+        var inside = sel && window.getSelection().anchorNode && pre.contains(window.getSelection().anchorNode);
+        document.getElementById('decoderInput').value = inside ? sel.trim() : pre.textContent;
+        switchSandboxTab('console');
+        document.getElementById('decoderInput').focus();
+        AudioEngine.click();
+      });
+
+      // 11. HEADER UI & STICKERS
+      function updateHeaderUI() {
+        var node = getCurrentNode();
+        var solvedCount = Object.keys(state.solvedNodes).length;
+
+        document.getElementById('headerCoins').textContent = state.coins;
+        document.getElementById('headerOperatorName').textContent = state.profile.name || 'Ghost_01';
+        document.getElementById('headerSolvedCount').textContent = solvedCount + '/120 Nós';
+        document.getElementById('headerNodeTitle').textContent = 'Nó ' + String(node.localIndex).padStart(2, '0') + '/30';
+
+        var avatarWrap = document.getElementById('headerAvatarWrapper');
+        var frameItem = SHOP_ITEMS.find(function (i) { return i.id === state.equippedFrame; });
+        avatarWrap.className = 'w-9 h-9 rounded-full overflow-hidden flex items-center justify-center bg-slate-900 text-lg ring-2 transition ' +
+          (frameItem ? frameItem.ringClass : 'ring-emerald-400/50');
+
+        if (state.profile.avatarType === 'image' && state.profile.avatarValue) {
+          // Só aceita imagem em data URL gerada pelo próprio jogo (evita HTML injetado via save editado).
+          avatarWrap.textContent = '';
+          if (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(state.profile.avatarValue)) {
+            var img = document.createElement('img');
+            img.src = state.profile.avatarValue;
+            img.className = 'w-full h-full object-cover';
+            img.alt = 'Avatar';
+            avatarWrap.appendChild(img);
+          } else {
+            avatarWrap.textContent = '👾';
+          }
+        } else {
+          avatarWrap.textContent = state.profile.avatarValue || '👾';
+        }
+
+        var badge = document.getElementById('headerProfileBadge');
+        var icons = { 'Fácil': '🟢', 'Médio': '🟡', 'Difícil': '🔴', 'Mago': '🔮' };
+        badge.textContent = (icons[node.profile] || '') + ' ' + node.profile;
+        badge.className = 'px-2 py-0.5 rounded-md text-[10px] uppercase tracking-wider font-extrabold border ';
+        if (node.profile === 'Fácil') {
+          badge.className += 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30';
+        } else if (node.profile === 'Médio') {
+          badge.className += 'bg-amber-500/20 text-amber-300 border-amber-400/30';
+        } else if (node.profile === 'Difícil') {
+          badge.className += 'bg-rose-500/20 text-rose-300 border-rose-400/30';
+        } else {
+          badge.className += 'bg-purple-500/25 text-purple-300 border-purple-400/40';
+        }
+
+        document.documentElement.setAttribute('data-theme', state.theme);
+        document.getElementById('themeSelect').value = state.theme;
+      }
+
+      function spawnSticker(text, x, y) {
+        AudioEngine.sticker();
+        var el = document.createElement('div');
+        el.className = 'floating-sticker px-4 py-2 rounded-2xl bg-slate-950/95 border-2 border-emerald-400/70 text-white font-bold text-xs sm:text-sm shadow-2xl whitespace-nowrap';
+        el.textContent = text;
+        el.style.left = Math.min(window.innerWidth - 115, Math.max(115, x)) + 'px';
+        el.style.top = Math.max(75, y) + 'px';
+        document.body.appendChild(el);
+        setTimeout(function () { el.remove(); }, 1950);
+      }
+
+      document.querySelectorAll('.sticker-trigger').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var rect = btn.getBoundingClientRect();
+          spawnSticker(btn.getAttribute('data-sticker'), rect.left + rect.width / 2, rect.top - 10);
+        });
+      });
+
+      // 12. LOCAL OPERATOR LOGIN MODAL
+      var draftAvatarType = 'icon';
+      var draftAvatarValue = '👾';
+      var camStream = null;
+
+      function stopProfileCamera() {
+        if (camStream) {
+          camStream.getTracks().forEach(function (t) { t.stop(); });
+          camStream = null;
+        }
+        document.getElementById('profileCameraVideo').classList.add('hidden');
+        document.getElementById('profileCameraControls').classList.add('hidden');
+      }
+
+      function syncProfilePreview() {
+        var emojiEl = document.getElementById('profileEmojiPreview');
+        var imgEl = document.getElementById('profileImgPreview');
+        if (draftAvatarType === 'image' && draftAvatarValue) {
+          emojiEl.classList.add('hidden');
+          imgEl.src = draftAvatarValue;
+          imgEl.classList.remove('hidden');
+        } else {
+          imgEl.classList.add('hidden');
+          emojiEl.textContent = draftAvatarValue || '👾';
+          emojiEl.classList.remove('hidden');
+        }
+      }
+
+      function openProfileModal() {
+        draftAvatarType = state.profile.avatarType || 'icon';
+        draftAvatarValue = state.profile.avatarValue || '👾';
+        document.getElementById('inputOperatorName').value = state.profile.name || '';
+        document.getElementById('cameraStatusError').classList.add('hidden');
+        stopProfileCamera();
+        syncProfilePreview();
+        document.getElementById('btnCloseProfile').classList.toggle('hidden', !state.profile.created);
+        openModal('profileModal');
+      }
+
+      document.getElementById('btnCloseProfile').addEventListener('click', function () { closeModal('profileModal'); });
+
+      document.getElementById('btnOpenProfile').addEventListener('click', openProfileModal);
+
+      document.querySelectorAll('.avatar-preset-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          stopProfileCamera();
+          draftAvatarType = 'icon';
+          draftAvatarValue = btn.getAttribute('data-avatar');
+          syncProfilePreview();
+          AudioEngine.click();
+        });
+      });
+
+      document.getElementById('btnTabAvatars').addEventListener('click', function () {
+        stopProfileCamera();
+        syncProfilePreview();
+      });
+
+      document.getElementById('btnTabCamera').addEventListener('click', function () {
+        var errEl = document.getElementById('cameraStatusError');
+        errEl.classList.add('hidden');
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          errEl.textContent = '⚠️ Câmera indisponível neste navegador. Selecione um ícone ou foto da galeria!';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 256, height: 256 } })
+          .then(function (stream) {
+            camStream = stream;
+            var vid = document.getElementById('profileCameraVideo');
+            vid.srcObject = stream;
+            document.getElementById('profileEmojiPreview').classList.add('hidden');
+            document.getElementById('profileImgPreview').classList.add('hidden');
+            vid.classList.remove('hidden');
+            document.getElementById('profileCameraControls').classList.remove('hidden');
+          })
+          .catch(function () {
+            errEl.textContent = '⚠️ Permissão de câmera bloqueada. Escolha um ícone ou imagem da galeria!';
+            errEl.classList.remove('hidden');
+          });
+      });
+
+      document.getElementById('btnSnapCamera').addEventListener('click', function () {
+        var vid = document.getElementById('profileCameraVideo');
+        if (!vid || !camStream) return;
+        var c = document.createElement('canvas');
+        c.width = 160;
+        c.height = 160;
+        var cx = c.getContext('2d');
+        cx.translate(160, 0);
+        cx.scale(-1, 1);
+        cx.drawImage(vid, 0, 0, 160, 160);
+        draftAvatarType = 'image';
+        draftAvatarValue = c.toDataURL('image/jpeg', 0.82);
+        stopProfileCamera();
+        syncProfilePreview();
+        AudioEngine.hint();
+      });
+
+      document.getElementById('btnStopCamera').addEventListener('click', function () {
+        stopProfileCamera();
+        syncProfilePreview();
+      });
+
+      document.getElementById('inputGalleryUpload').addEventListener('change', function (e) {
+        var file = e.target.files && e.target.files[0];
+        if (!file) return;
+        stopProfileCamera();
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          var img = new Image();
+          img.onload = function () {
+            var c = document.createElement('canvas');
+            c.width = 160;
+            c.height = 160;
+            var cx = c.getContext('2d');
+            var min = Math.min(img.width, img.height);
+            cx.drawImage(img, (img.width - min) / 2, (img.height - min) / 2, min, min, 0, 0, 160, 160);
+            draftAvatarType = 'image';
+            draftAvatarValue = c.toDataURL('image/jpeg', 0.82);
+            syncProfilePreview();
+            AudioEngine.hint();
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('btnConfirmProfile').addEventListener('click', function () {
+        var val = document.getElementById('inputOperatorName').value.trim();
+        state.profile = {
+          created: true,
+          name: val || 'Ghost_01',
+          avatarType: draftAvatarType,
+          avatarValue: draftAvatarValue
+        };
+        stopProfileCamera();
+        saveState();
+        updateHeaderUI();
+        closeModal('profileModal');
+        AudioEngine.solved();
+        if (!state.seenHelp) openHelp();
+      });
+
+      // 13. MODAIS (abrir/fechar, Esc, clique fora)
+      var MODAL_IDS = ['profileModal', 'nodesModal', 'shopModal', 'solvedModal', 'helpModal'];
+
+      function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(id) {
+        if (id === 'profileModal') {
+          if (!state.profile.created) return; // a 1ª credencial é obrigatória
+          stopProfileCamera();
+        }
+        document.getElementById(id).classList.add('hidden');
+        if (MODAL_IDS.every(function (m) { return document.getElementById(m).classList.contains('hidden'); })) {
+          document.body.style.overflow = '';
+        }
+      }
+
+      MODAL_IDS.forEach(function (id) {
+        var el = document.getElementById(id);
+        el.addEventListener('click', function (e) { if (e.target === el) closeModal(id); });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        for (var i = MODAL_IDS.length - 1; i >= 0; i--) {
+          if (!document.getElementById(MODAL_IDS[i]).classList.contains('hidden')) { closeModal(MODAL_IDS[i]); break; }
+        }
+      });
+
+      // 14. MAPA DA REDE (nós bloqueados até resolver o anterior)
+      var activeProfileTab = 'Fácil';
+      var PROFILE_ICONS = { 'Fácil': '🟢', 'Médio': '🟡', 'Difícil': '🔴', 'Mago': '🔮' };
+
+      function renderNodesMatrix() {
+        var solvedTotal = Object.keys(state.solvedNodes).length;
+        document.getElementById('nodesProgressSummary').textContent = 'Resolvidos: ' + solvedTotal + '/120 nós • resolva um nó para liberar o próximo';
+
+        document.querySelectorAll('.profile-tab-btn').forEach(function (btn) {
+          var prof = btn.getAttribute('data-profile-tab');
+          var isSel = prof === activeProfileTab;
+          var first = NODES.find(function (n) { return n.profile === prof; });
+          var locked = !isUnlocked(first.globalId);
+          btn.textContent = (locked ? '🔒' : PROFILE_ICONS[prof]) + ' ' + prof + ' ' + solvedInProfile(prof) + '/30';
+          btn.className = 'profile-tab-btn btn-tactile py-2 rounded-xl font-bold text-xs sm:text-sm border transition ' +
+            (isSel ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200' : 'bg-white/5 border-white/10 opacity-70');
+        });
+
+        var grid = document.getElementById('nodesGridContainer');
+        grid.innerHTML = '';
+
+        NODES.filter(function (n) { return n.profile === activeProfileTab; }).forEach(function (n) {
+          var solved = !!state.solvedNodes[n.globalId];
+          var current = n.globalId === state.currentGlobalId;
+          var unlocked = isUnlocked(n.globalId);
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.disabled = !unlocked;
+          btn.setAttribute('aria-label', 'Nó ' + n.localIndex + (solved ? ' resolvido' : unlocked ? ' disponível' : ' bloqueado'));
+          btn.className = 'btn-tactile p-2.5 rounded-2xl border flex flex-col items-center justify-center text-center transition ' +
+            (!unlocked
+              ? 'node-locked bg-black/45 border-white/10'
+              : current
+                ? 'bg-emerald-500/30 border-emerald-400 ring-2 ring-emerald-400/50'
+                : solved
+                  ? 'bg-sky-500/15 border-sky-400/40'
+                  : 'bg-amber-500/15 border-amber-400/50');
+
+          var num = document.createElement('span');
+          num.className = 'font-code text-sm font-extrabold';
+          num.textContent = String(n.localIndex).padStart(2, '0');
+          var ico = document.createElement('span');
+          ico.className = 'text-[11px] mt-0.5';
+          ico.textContent = solved ? '✅' : unlocked ? '▶' : '🔒';
+          var vec = document.createElement('span');
+          vec.className = 'text-[9px] opacity-70 truncate w-full mt-0.5';
+          vec.textContent = unlocked ? n.vector : 'Bloqueado';
+          btn.appendChild(num);
+          btn.appendChild(ico);
+          btn.appendChild(vec);
+
+          btn.addEventListener('click', function () {
+            if (goToNode(n.globalId)) closeModal('nodesModal');
+          });
+          grid.appendChild(btn);
+        });
+      }
+
+      document.getElementById('btnOpenNodes').addEventListener('click', function () {
+        activeProfileTab = getCurrentNode().profile;
+        renderNodesMatrix();
+        openModal('nodesModal');
+      });
+      document.getElementById('btnCloseNodes').addEventListener('click', function () { closeModal('nodesModal'); });
+      document.getElementById('btnJumpUnsolved').addEventListener('click', function () {
+        if (goToNode(frontierId())) closeModal('nodesModal');
+      });
+      document.querySelectorAll('.profile-tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          activeProfileTab = btn.getAttribute('data-profile-tab');
+          renderNodesMatrix();
+        });
+      });
+
+      // 15. LOJA
+      function renderShop() {
+        document.getElementById('shopCoinsDisplay').textContent = state.coins;
+        var container = document.getElementById('shopItemsContainer');
+        container.innerHTML = '';
+
+        SHOP_ITEMS.forEach(function (item) {
+          var owned = state.purchasedItems.indexOf(item.id) !== -1;
+          var equipped = item.type === 'frame' && state.equippedFrame === item.id;
+
+          var card = document.createElement('div');
+          card.className = 'p-3.5 rounded-2xl border flex flex-col justify-between gap-2.5 ' +
+            (equipped ? 'bg-amber-500/20 border-amber-400' : owned ? 'bg-emerald-500/15 border-emerald-400/40' : 'bg-black/45 border-white/15');
+          card.innerHTML =
+            '<div class="flex items-start gap-3">' +
+            '<div class="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center text-2xl shrink-0">' + item.icon + '</div>' +
+            '<div>' +
+            '<div class="font-bold text-sm">' + item.name + '</div>' +
+            '<p class="text-[11px] opacity-75 leading-snug mt-0.5">' + item.desc + '</p>' +
+            '</div>' +
+            '</div>' +
+            '<button type="button" class="shop-buy-btn btn-tactile w-full py-2 rounded-xl font-bold text-xs ' +
+            (equipped
+              ? 'bg-amber-400 text-slate-950'
+              : owned
+                ? 'bg-emerald-400/25 text-emerald-200 border border-emerald-400/40'
+                : 'bg-amber-500/25 hover:bg-amber-500/40 border border-amber-400/40 text-amber-300') +
+            '">' +
+            (equipped ? '✓ Aro Equipado (toque para remover)' : owned ? (item.type === 'frame' ? 'Equipar Aro' : '✓ Ativo') : 'Adquirir (' + item.price + ' 🪙)') +
+            '</button>';
+
+          card.querySelector('.shop-buy-btn').addEventListener('click', function () {
+            if (owned) {
+              if (item.type === 'frame') {
+                state.equippedFrame = equipped ? '' : item.id;
+                saveState();
+                updateHeaderUI();
+                renderShop();
+                AudioEngine.click();
+              }
+              return;
+            }
+
+            if (state.coins < item.price) {
+              AudioEngine.error();
+              spawnSticker('🪙 Faltam ' + (item.price - state.coins) + ' moedas', window.innerWidth / 2, window.innerHeight * 0.35);
+              return;
+            }
+
+            state.coins -= item.price;
+            state.purchasedItems.push(item.id);
+            if (item.type === 'frame') state.equippedFrame = item.id;
+            saveState();
+            updateHeaderUI();
+            // Não chama renderCurrentNode(): isso apagaria a chave digitada e os cabeçalhos editados.
+            switchSandboxTab(currentSandboxTab);
+            renderHintsPanel();
+            if (item.id === 'vuln_scanner') {
+              var n = getCurrentNode();
+              var tipEl = document.getElementById('nodeTabTip');
+              tipEl.textContent = '👉 Comece pela aba ' + TAB_LABELS[n.surfaceTab] + '.';
+              tipEl.classList.remove('hidden');
+            }
+            renderShop();
+            AudioEngine.solved();
+            spawnSticker(item.icon + ' ' + item.name + ' Adquirido!', window.innerWidth / 2, window.innerHeight * 0.35);
+          });
+
+          container.appendChild(card);
+        });
+      }
+
+      document.getElementById('btnOpenShop').addEventListener('click', function () {
+        renderShop();
+        openModal('shopModal');
+      });
+      document.getElementById('btnCloseShop').addEventListener('click', function () { closeModal('shopModal'); });
+
+      // 16. COMO JOGAR
+      function openHelp() { openModal('helpModal'); }
+      function finishHelp() {
+        if (!state.seenHelp) {
+          state.seenHelp = true;
+          saveState();
+        }
+        closeModal('helpModal');
+      }
+      document.getElementById('btnOpenHelp').addEventListener('click', openHelp);
+      document.getElementById('btnCloseHelp').addEventListener('click', finishHelp);
+      document.getElementById('btnHelpStart').addEventListener('click', finishHelp);
+
+      // 17. EVENTOS
+      document.getElementById('answerForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        validateSubmittedKey(document.getElementById('answerInput').value);
+      });
+
+      function sendAddress() {
+        switchSandboxTab('web');
+        evaluateTargetState();
+        AudioEngine.click();
+      }
+      document.getElementById('btnSendAddress').addEventListener('click', sendAddress);
+      document.getElementById('virtualAddressInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          sendAddress();
+        }
+      });
+
+      document.getElementById('btnResendHeaders').addEventListener('click', function () {
+        switchSandboxTab('web');
+        evaluateTargetState();
+        AudioEngine.hint();
+      });
+      ['hdrCookieLoggedIn', 'hdrCookieRole', 'hdrReferer', 'hdrUserAgent', 'hdrXff', 'hdrAuth'].forEach(function (id) {
+        document.getElementById(id).addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('btnResendHeaders').click();
+          }
+        });
+      });
+
+      document.getElementById('btnHint1').addEventListener('click', function () { unlockHint(0); });
+      document.getElementById('btnHint2').addEventListener('click', function () { unlockHint(1); });
+      document.getElementById('btnHint3').addEventListener('click', function () { unlockHint(2); });
+
+      document.getElementById('btnToggleScratchpad').addEventListener('click', function () {
+        document.getElementById('scratchpadBox').classList.toggle('hidden');
+        AudioEngine.click();
+      });
+      document.getElementById('scratchpadInput').addEventListener('input', function (e) {
+        var node = getCurrentNode();
+        state.notes[node.globalId] = e.target.value;
+        saveState();
+      });
+
+      document.getElementById('btnPrevNode').addEventListener('click', function () {
+        if (state.currentGlobalId > 1) {
+          goToNode(state.currentGlobalId - 1);
+          AudioEngine.click();
+        }
+      });
+      document.getElementById('btnNextNodeNav').addEventListener('click', function () {
+        if (state.currentGlobalId < NODES.length && goToNode(state.currentGlobalId + 1)) AudioEngine.click();
+      });
+
+      document.getElementById('btnProceedNextNode').addEventListener('click', function () {
+        closeModal('solvedModal');
+        if (state.currentGlobalId < NODES.length) {
+          goToNode(state.currentGlobalId + 1);
+        } else {
+          activeProfileTab = 'Mago';
+          renderNodesMatrix();
+          openModal('nodesModal');
+        }
+      });
+      document.getElementById('btnStayOnNode').addEventListener('click', function () { closeModal('solvedModal'); });
+
+      document.getElementById('themeSelect').addEventListener('change', function (e) {
+        state.theme = e.target.value;
+        saveState();
+        updateHeaderUI();
+        AudioEngine.click();
+      });
+
+      document.getElementById('btnToggleSound').addEventListener('click', function (e) {
+        state.muted = AudioEngine.toggleMute();
+        e.currentTarget.textContent = state.muted ? '🔇' : '🔊';
+        saveState();
+      });
+
+      // 18. INICIALIZAÇÃO
+      function initApp() {
+        loadState();
+        AudioEngine.setMuted(state.muted);
+        document.getElementById('btnToggleSound').textContent = state.muted ? '🔇' : '🔊';
+        renderCurrentNode();
+        if (!state.profile.created) {
+          openProfileModal();
+        } else if (!state.seenHelp) {
+          openHelp();
+        }
+        if (tamperDetected) {
+          setTimeout(function () {
+            spawnSticker('⚠️ Save alterado manualmente: progresso ajustado', window.innerWidth / 2, window.innerHeight * 0.3);
+          }, 600);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
+    })();
+  </script>
+</body>
+</html>
