@@ -1,5 +1,5 @@
 // Service worker: rede primeiro, cache como reserva (jogo funciona offline após a 1ª visita).
-var CACHE = 'voidbreach-v4';
+var CACHE = 'voidbreach-v5';
 var CORE = ['./', './index.html', './icon.svg', './fases.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', function (e) {
@@ -15,6 +15,8 @@ self.addEventListener('activate', function (e) {
 });
 
 self.addEventListener('fetch', function (e) {
+  // Métricas (GoatCounter): sempre pela rede, nunca no cache.
+  if (/goatcounter\.com|gc\.zgo\.at/.test(e.request.url)) return;
   if (e.request.method !== 'GET') return;
   e.respondWith(
     fetch(e.request).then(function (res) {
